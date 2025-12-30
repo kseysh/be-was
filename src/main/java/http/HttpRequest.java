@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,5 +49,13 @@ public class HttpRequest{
 
     public byte[] getBody() {
         return body;
+    }
+
+    public Map<String, String> getQuery() {
+        return requestLine.getQueries();
+    }
+
+    public void setPath(String path) {
+        requestLine.setPath(path);
     }
 }

@@ -16,7 +16,7 @@ public class HttpRequestLine {
     private static final String PARAM_SEPARATOR = "&";
 
     private final HttpMethod method;
-    private final String path;
+    private String path;
     private final String version;
     private final Map<String, String> queries;
 
@@ -72,7 +72,15 @@ public class HttpRequestLine {
         return version;
     }
 
+    public Map<String, String> getQueries() {
+        return queries;
+    }
+
     public String toString(){
         return this.method.name() + REQUEST_LINE_SPACE + this.path + REQUEST_LINE_SPACE + this.version;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 }
