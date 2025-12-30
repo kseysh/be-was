@@ -1,43 +1,20 @@
 package servlet;
 
-import java.util.HashMap;
-import java.util.Map;
+import handler.Handler;
+import handler.HandlerMapper;
 import http.HttpRequest;
 import http.HttpResponse;
 
-public class DispatcherServlet implements Servlet {
+public class DispatcherServlet {
 
-    private static final Map<String, Servlet> SERVLETS = new HashMap<>();
     private static final DispatcherServlet INSTANCE = new DispatcherServlet();
-
-    private DispatcherServlet() {
-        initMapping();
-    }
-
-    private void initMapping() {
-        SERVLETS.put("/", new StaticResourceServlet());
-    }
 
     public static DispatcherServlet getInstance(){
         return INSTANCE;
     }
 
-    public Servlet getHandler(String path){
-        while(SERVLETS.get(path) == null){
-            int lastSlashIndex = path.lastIndexOf('/');
-            if (lastSlashIndex == 0) {
-                break;
-            } else {
-                path = path.substring(0, lastSlashIndex);
-            }
-        }
-
-        return SERVLETS.get("/");
-    }
-
-    @Override
-    public HttpResponse doService(HttpRequest request) {
-        Servlet servlet = getHandler(request.getPath());
-        return servlet.doService(request);
+    public void doDispatch(HttpRequest request, HttpResponse response) {
+        Handler handler = HandlerMapper.getHandler(request.getPath());
+        handler.handle(request, response);
     }
 }
