@@ -2,7 +2,7 @@ package servlet;
 
 import enums.HttpHeader;
 import java.io.File;
-import java.io.FileInputStream;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 import http.HttpRequest;
@@ -20,15 +20,11 @@ public class StaticResourceServlet implements Servlet {
         File file = new File(RESOURCES_PATH + path);
 
         if (file.exists() && file.isFile()) {
-            byte[] body = new byte[(int) file.length()];
-            try (FileInputStream fis = new FileInputStream(file)) {
-                int offset = 0;
-                int numRead;
-                while (offset < body.length && (numRead = fis.read(body, offset, body.length - offset)) >= 0) {
-                    offset += numRead;
-                }
+            byte[] body;
+            try {
+                body = Files.readAllBytes(file.toPath());
             }catch (Exception e) {
-                return HttpResponse.internalServerError(null, null, request.getVersion());
+                return HttpResponse.internalServerError(Map.of(), new byte[0], request.getVersion());
             }
 
             Map<String, String> headers = new HashMap<>();
