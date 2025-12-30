@@ -2,13 +2,13 @@ package servlet;
 
 import java.util.HashMap;
 import java.util.Map;
-import webserver.http.HttpRequest;
-import webserver.http.HttpResponse;
+import http.HttpRequest;
+import http.HttpResponse;
 
 public class DispatcherServlet implements Servlet {
 
-    private static final DispatcherServlet INSTANCE = new DispatcherServlet();
     private static final Map<String, Servlet> SERVLETS = new HashMap<>();
+    private static final DispatcherServlet INSTANCE = new DispatcherServlet();
 
     private DispatcherServlet() {
         initMapping();
@@ -32,12 +32,12 @@ public class DispatcherServlet implements Servlet {
             }
         }
 
-        return SERVLETS.get(path);
+        return SERVLETS.get("/");
     }
 
     @Override
     public HttpResponse doService(HttpRequest request) {
-        Servlet servlet = getHandler(request.getRequestURI());
+        Servlet servlet = getHandler(request.getPath());
         return servlet.doService(request);
     }
 }
