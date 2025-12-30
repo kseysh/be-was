@@ -25,8 +25,9 @@ public class HttpHeaders {
     }
 
     public int getContentLength() {
-        String length = headers.get(HttpHeader.CONTENT_LENGTH.getValue())[0];
-        return (length != null) ? Integer.parseInt(length) : 0;
+        String[] values = headers.get(HttpHeader.CONTENT_LENGTH.getValue());
+        if (values == null || values.length == 0) return 0; {}
+        return Integer.parseInt(values[0]);
     }
 
     public String toString(){
