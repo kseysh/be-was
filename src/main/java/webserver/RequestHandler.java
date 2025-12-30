@@ -30,23 +30,9 @@ public class RequestHandler implements Runnable {
             HttpResponse response = new HttpResponse();
             DispatcherServlet dispatcherServlet = DispatcherServlet.getInstance();
             dispatcherServlet.doDispatch(request, response);
-            sendResponse(response, out);
+            response.writeTo(out);
         }catch (IOException e) {
             logger.error(e.getMessage());
         }
-    }
-
-    private void sendResponse(HttpResponse response, OutputStream out) throws IOException {
-        DataOutputStream dos = new DataOutputStream(out);
-        dos.writeBytes(response.getHttpVersionAndResponseCode());
-
-        Map<String, String> headers = response.getHeaders();
-        for (Map.Entry<String, String> header : headers.entrySet()) {
-            dos.writeBytes(header.getKey() + ": " + header.getValue() + "\r\n");
-        }
-        dos.writeBytes("\r\n");
-
-        dos.write(response.getBody(), 0, response.getBody().length);
-        dos.flush();
     }
 }
