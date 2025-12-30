@@ -52,8 +52,10 @@ public class HttpResponse {
             DataOutputStream dos = new DataOutputStream(out);
             dos.writeBytes(this.getHttpVersionAndResponseCode());
 
-            for (Map.Entry<String, String> header : headers.entrySet()) {
-                dos.writeBytes(header.getKey() + ": " + header.getValue() + "\r\n");
+            if(headers != null){
+                for (Map.Entry<String, String> header : headers.entrySet()) {
+                    dos.writeBytes(header.getKey() + ": " + header.getValue() + "\r\n");
+                }
             }
             dos.writeBytes("\r\n");
 
