@@ -1,7 +1,8 @@
 package enums;
 
 public enum HttpHeader {
-    CONTENT_LENGTH("Content-Length");
+    CONTENT_LENGTH("Content-Length"),
+    CONTENT_TYPE("Content-Type");
 
     private String value;
 
