@@ -1,6 +1,5 @@
 package webserver;
 
-import enums.HttpHeader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,12 +10,11 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import servlet.DispatcherServlet;
-import webserver.http.HttpRequest;
-import webserver.http.HttpResponse;
+import http.HttpRequest;
+import http.HttpResponse;
 
 public class RequestHandler implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
-
     private final Socket connection;
 
     public RequestHandler(Socket connectionSocket) {
@@ -31,13 +29,13 @@ public class RequestHandler implements Runnable {
             HttpRequest request = new HttpRequest(in);
             DispatcherServlet dispatcherServlet = DispatcherServlet.getInstance();
             HttpResponse response = dispatcherServlet.doService(request);
-            sendMessage(response, out);
+            sendResponse(response, out);
         }catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void sendMessage(HttpResponse response, OutputStream out) throws IOException {
+    private void sendResponse(HttpResponse response, OutputStream out) throws IOException {
         DataOutputStream dos = new DataOutputStream(out);
         dos.writeBytes(response.getHttpVersionAndResponseCode());
 
