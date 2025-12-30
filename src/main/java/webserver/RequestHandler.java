@@ -1,15 +1,13 @@
 package webserver;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-
-import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import servlet.DispatcherServlet;
+
 import http.HttpRequest;
 import http.HttpResponse;
 
@@ -27,6 +25,7 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()){
             HttpRequest request = new HttpRequest(in);
+            logger.debug("New Request : {}", request);
             HttpResponse response = new HttpResponse();
             DispatcherServlet dispatcherServlet = DispatcherServlet.getInstance();
             dispatcherServlet.doDispatch(request, response);

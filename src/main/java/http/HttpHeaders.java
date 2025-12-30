@@ -38,7 +38,7 @@ public class HttpHeaders {
             for (int i = 0; i < values.length - 1; i++) {
                 sb.append(values[i]).append(HEADER_VALUE_DELIMITER);
             }
-            sb.append(values[values.length - 1]);
+            sb.append(values[values.length - 1]).append('\n');
         }
         return sb.toString();
     }
