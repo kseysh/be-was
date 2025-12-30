@@ -4,14 +4,13 @@ import enums.ContentTypes;
 import enums.HttpHeader;
 import enums.HttpStatus;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import http.HttpRequest;
 import http.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.FileReader;
 
 public class StaticResourceHandler implements Handler {
     private static final Logger logger = LoggerFactory.getLogger(StaticResourceHandler.class);
@@ -28,7 +27,7 @@ public class StaticResourceHandler implements Handler {
             File file = new File(RESOURCES_PATH + path);
 
             if (file.exists() && file.isFile()) {
-                body = readAllBytes(file);
+                body = FileReader.readAllBytes(file);
             }else{
                 response.setVersion(request.getVersion());
                 response.setStatusCode(HttpStatus.NOT_FOUND);
@@ -51,25 +50,6 @@ public class StaticResourceHandler implements Handler {
         response.setBody(body);
         response.setHeaders(headers);
         response.setVersion(request.getVersion());
-
-    }
-
-    public byte[] readAllBytes(File file) throws IOException {
-        int fileLength = (int) file.length();
-        byte[] bytes = new byte[fileLength];
-
-        try (FileInputStream fis = new FileInputStream(file)) {
-            int offset = 0;
-            int numRead;
-
-            while (
-                    offset < bytes.length &&
-                    (numRead = fis.read(bytes, offset, bytes.length - offset)) >= 0
-            ) {
-                offset += numRead;
-            }
-        }
-        return bytes;
     }
 
     private String getContentType(String extension) {
