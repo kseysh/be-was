@@ -9,23 +9,22 @@ public class HttpResponse {
     private HttpStatus statusCode;
     private String version;
 
-    public HttpResponse(Map<String, String> headers, byte[] body, HttpStatus statusCode, String version) {
+    public HttpResponse() {}
+
+    public void setHeaders(Map<String, String> headers) {
         this.headers = headers;
+    }
+
+    public void setBody(byte[] body) {
         this.body = body;
+    }
+
+    public void setStatusCode(HttpStatus statusCode) {
         this.statusCode = statusCode;
+    }
+
+    public void setVersion(String version) {
         this.version = version;
-    }
-
-    public static HttpResponse ok(Map<String, String> headers,  byte[] body, String httpVersion) {
-        return new HttpResponse(headers, body, HttpStatus.OK, httpVersion);
-    }
-
-    public static HttpResponse notFound(Map<String, String> headers,  byte[] body, String httpVersion) {
-        return new HttpResponse(headers, body, HttpStatus.NOT_FOUND, httpVersion);
-    }
-
-    public static HttpResponse internalServerError(Map<String, String> headers,  byte[] body, String httpVersion) {
-        return new HttpResponse(headers, body, HttpStatus.NOT_FOUND, httpVersion);
     }
 
     public Map<String, String> getHeaders() {
