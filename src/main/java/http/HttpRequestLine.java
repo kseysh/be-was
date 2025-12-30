@@ -71,4 +71,8 @@ public class HttpRequestLine {
     public String getVersion() {
         return version;
     }
+
+    public String toString(){
+        return this.method.name() + REQUEST_LINE_SPACE + this.path + REQUEST_LINE_SPACE + this.version;
+    }
 }

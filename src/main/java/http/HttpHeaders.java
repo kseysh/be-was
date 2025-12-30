@@ -29,4 +29,12 @@ public class HttpHeaders {
     public Map<String, String> getHeaders() {
         return headers;
     }
+
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<String, String> entry : headers.entrySet()) {
+            sb.append(entry.getKey()).append(HEADER_DELIMITER).append(entry.getValue()).append('\n');
+        }
+        return sb.toString();
+    }
 }
