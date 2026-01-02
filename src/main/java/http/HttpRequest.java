@@ -14,9 +14,10 @@ public class HttpRequest{
 
     public HttpRequest(InputStream in) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(in));
-        requestLine = new HttpRequestLine(br);
-        headers = new HttpHeaders(br);
-        body = new HttpRequestBody(br, headers.getContentLength());
+        RequestParser parser = new RequestParser(br);
+        requestLine = parser.getRequestLine();
+        headers = parser.getHeaders();
+        body = parser.getBody();
     }
 
     public String getPath() {

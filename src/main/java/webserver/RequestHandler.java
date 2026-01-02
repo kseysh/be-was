@@ -1,5 +1,6 @@
 package webserver;
 
+import http.ResponseWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -29,7 +30,7 @@ public class RequestHandler implements Runnable {
             HttpResponse response = new HttpResponse();
             DispatcherServlet dispatcherServlet = DispatcherServlet.getInstance();
             dispatcherServlet.doDispatch(request, response);
-            response.writeTo(out);
+            ResponseWriter.writeTo(out, response);
         }catch (IOException e) {
             logger.error(e.getMessage());
         }
