@@ -28,10 +28,11 @@ public class CreateUserHandler implements Handler {
     }
 
     public void get(HttpRequest request, HttpResponse response) throws HttpException {
-        String userId = request.getQuery().get("userId");
-        String password = request.getQuery().get("password");
-        String name = request.getQuery().get("name");
-        String email = request.getQuery().get("email");
+        Map<String, String> queries = request.getQuery();
+        String userId = queries.get("userId");
+        String password = queries.get("password");
+        String name = queries.get("name");
+        String email = queries.get("email");
 
         validateParameters(userId, password, name, email);
 
