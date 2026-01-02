@@ -16,12 +16,14 @@ import http.HttpResponse;
 import util.FileReader;
 
 public class StaticResourceHandler implements Handler {
+
     private static final String RESOURCES_PATH = "./src/main/resources/static";
     private static final String EMPTY_EXTENSION = "";
     private static final char EXTENSION_SEPARATOR = '.';
     private static final StaticResourceHandler INSTANCE = new StaticResourceHandler();
 
-    private StaticResourceHandler() {}
+    private StaticResourceHandler() {
+    }
 
     public static StaticResourceHandler getInstance() {
         return INSTANCE;
@@ -33,7 +35,7 @@ public class StaticResourceHandler implements Handler {
         String path = request.getPath();
 
         byte[] body;
-        try{
+        try {
             File file = new File(RESOURCES_PATH + path);
             validateFile(file, path);
             body = FileReader.readAllBytes(file);
@@ -43,7 +45,7 @@ public class StaticResourceHandler implements Handler {
 
         Map<String, String> headers = new HashMap<>();
         String extension = getFileExtension(path);
-        if(!extension.equals(EMPTY_EXTENSION)){
+        if (!extension.equals(EMPTY_EXTENSION)) {
             headers.put(HttpHeader.CONTENT_TYPE.getValue(), getContentType(extension));
         }
 
@@ -53,12 +55,12 @@ public class StaticResourceHandler implements Handler {
         response.setVersion(request.getVersion());
     }
 
-    private void validateFile(File file, String path) throws IOException {
-        if(!file.exists()){
+    private void validateFile(File file, String path) throws HttpException {
+        if (!file.exists()) {
             throw new NotFoundException(path + " file not found");
         }
 
-        if(!file.isFile()){
+        if (!file.isFile()) {
             throw new BadRequestException(path + " file is not a file");
         }
     }
@@ -68,9 +70,13 @@ public class StaticResourceHandler implements Handler {
     }
 
     private String getFileExtension(String path) {
-        if (path == null) return EMPTY_EXTENSION;
+        if (path == null) {
+            return EMPTY_EXTENSION;
+        }
         int separatorIndex = path.lastIndexOf(EXTENSION_SEPARATOR);
-        if (separatorIndex == -1 || separatorIndex == path.length() - 1) return EMPTY_EXTENSION;
+        if (separatorIndex == -1 || separatorIndex == path.length() - 1) {
+            return EMPTY_EXTENSION;
+        }
         return path.substring(separatorIndex + 1);
     }
 }

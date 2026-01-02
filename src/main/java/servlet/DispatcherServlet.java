@@ -11,17 +11,18 @@ public class DispatcherServlet {
 
     private static final DispatcherServlet INSTANCE = new DispatcherServlet();
 
-    private DispatcherServlet() {}
+    private DispatcherServlet() {
+    }
 
-    public static DispatcherServlet getInstance(){
+    public static DispatcherServlet getInstance() {
         return INSTANCE;
     }
 
     public void doDispatch(HttpRequest request, HttpResponse response) {
-        try{
+        try {
             Handler handler = HandlerMapper.getHandler(request.getPath());
             handler.handle(request, response);
-        }catch (HttpException e){
+        } catch (HttpException e) {
             ExceptionResolver.resolve(request, response, e);
         }
     }

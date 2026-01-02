@@ -7,7 +7,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Map;
 
-public class HttpRequest{
+public class HttpRequest {
+
     private final HttpRequestLine requestLine;
     private final HttpHeaders headers;
     private final HttpRequestBody body;
@@ -44,7 +45,7 @@ public class HttpRequest{
         requestLine.setPath(path);
     }
 
-    public String toString(){
+    public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(requestLine.toString()).append("\n");
         sb.append(headers.toString()).append("\n");

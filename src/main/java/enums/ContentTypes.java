@@ -24,10 +24,10 @@ public enum ContentTypes {
         this.extension = extension;
     }
 
-    public static ContentTypes from(String extension){
+    public static ContentTypes from(String extension) {
 
-        for(ContentTypes contentType : ContentTypes.values()){
-            if(contentType.extension.equals(extension)){
+        for (ContentTypes contentType : ContentTypes.values()) {
+            if (contentType.extension.equals(extension)) {
                 return contentType;
             }
         }

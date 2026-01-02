@@ -16,19 +16,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class CreateUserHandler implements Handler {
+
     private static final Logger logger = LoggerFactory.getLogger(CreateUserHandler.class);
     private static final CreateUserHandler INSTANCE = new CreateUserHandler();
 
-    private CreateUserHandler() {}
+    private CreateUserHandler() {
+    }
 
     public static CreateUserHandler getInstance() {
         return INSTANCE;
     }
 
     public void handle(HttpRequest request, HttpResponse response) throws HttpException {
-        if(request.getMethod() == HttpMethod.GET) {
+        if (request.getMethod() == HttpMethod.GET) {
             get(request, response);
-        }else{
+        } else {
             throw new NotFoundException("Not Supported Method");
         }
     }
@@ -54,8 +56,9 @@ public class CreateUserHandler implements Handler {
         response.setHeaders(headers);
     }
 
-    private static void validateParameters(String userId, String password, String name, String email) throws HttpException {
-        if(userId == null || password == null || name == null || email == null) {
+    private static void validateParameters(String userId, String password, String name, String email)
+            throws HttpException {
+        if (userId == null || password == null || name == null || email == null) {
             throw new BadRequestException("parameters are missing");
         }
     }

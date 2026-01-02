@@ -10,7 +10,8 @@ public class Database {
 
     private static final Map<String, User> users = new ConcurrentHashMap<>();
 
-    private Database(){}
+    private Database() {
+    }
 
     public static void addUser(User user) {
         users.put(user.getUserId(), user);

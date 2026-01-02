@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RequestParser {
+
     private static final String REQUEST_LINE_SPACE = " ";
     private static final Integer REQUEST_LINE_LENGTH = 3;
     private static final String QUERY_SEPARATOR = "?";
@@ -102,7 +103,7 @@ public class RequestParser {
 
     // TODO: body를 BufferedReader로 하는 것은 메모리 성능이 좋지 않고 성능상 비효율적임
     private HttpRequestBody parseRequestBody(BufferedReader br, int length) throws IOException {
-        if (length == 0){
+        if (length == 0) {
             return new HttpRequestBody(new byte[0]);
         }
 
@@ -110,7 +111,9 @@ public class RequestParser {
         int totalRead = 0;
         while (totalRead < length) {
             int read = br.read(buffer, totalRead, length - totalRead);
-            if (read == -1) break;
+            if (read == -1) {
+                break;
+            }
             totalRead += read;
         }
 

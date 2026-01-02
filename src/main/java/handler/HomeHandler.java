@@ -10,7 +10,8 @@ public class HomeHandler implements Handler {
 
     private static final HomeHandler INSTANCE = new HomeHandler();
 
-    private HomeHandler() {}
+    private HomeHandler() {
+    }
 
     public static HomeHandler getInstance() {
         return INSTANCE;
@@ -20,7 +21,7 @@ public class HomeHandler implements Handler {
     public void handle(HttpRequest request, HttpResponse response) throws HttpException {
         if (request.getMethod() == HttpMethod.GET) {
             get(request, response);
-        }else{
+        } else {
             throw new NotFoundException("Not Supported Method");
         }
     }

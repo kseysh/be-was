@@ -4,6 +4,7 @@ import enums.HttpHeader;
 import java.util.Map;
 
 public class HttpHeaders {
+
     private static final String HEADER_KEY_DELIMITER = ":";
     private static final String HEADER_VALUE_DELIMITER = ",";
 
@@ -15,11 +16,13 @@ public class HttpHeaders {
 
     public int getContentLength() {
         String[] values = headers.get(HttpHeader.CONTENT_LENGTH.getValue());
-        if (values == null || values.length == 0) return 0;
+        if (values == null || values.length == 0) {
+            return 0;
+        }
         return Integer.parseInt(values[0]);
     }
 
-    public String toString(){
+    public String toString() {
         StringBuilder sb = new StringBuilder();
         for (Map.Entry<String, String[]> entry : headers.entrySet()) {
             sb.append(entry.getKey()).append(HEADER_KEY_DELIMITER);

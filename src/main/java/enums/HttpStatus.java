@@ -13,7 +13,8 @@ public enum HttpStatus {
     NOT_FOUND("404", "Not Found"),
 
     // 5XX Response
-    INTERNAL_SERVER_ERROR("500", "Internal Server Error"),;
+    INTERNAL_SERVER_ERROR("500", "Internal Server Error"),
+    ;
 
     private final String responseCode;
 
@@ -27,6 +28,7 @@ public enum HttpStatus {
     public String getResponseCode() {
         return responseCode;
     }
+
     public String getResponseCodeString() {
         return responseCodeString;
     }

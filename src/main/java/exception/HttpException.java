@@ -2,7 +2,8 @@ package exception;
 
 import enums.HttpStatus;
 
-public class HttpException extends RuntimeException{
+public class HttpException extends RuntimeException {
+
     private final HttpStatus status;
     private final String message;
 

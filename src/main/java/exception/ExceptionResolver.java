@@ -11,20 +11,24 @@ import java.util.Map;
 import util.FileReader;
 
 public class ExceptionResolver {
+
     private static final String ERROR_RESOURCES_PATH = "./src/main/resources/static/error";
     private static final Map<HttpStatus, String> errorPageMapper = Map.of(
             HttpStatus.INTERNAL_SERVER_ERROR, "/500.html",
             HttpStatus.NOT_FOUND, "/404.html"
     );
 
-    private ExceptionResolver() {}
+    private ExceptionResolver() {
+    }
 
     public static void resolve(HttpRequest request, HttpResponse response, HttpException e) {
         byte[] body;
 
         String errorPage = errorPageMapper.get(e.getStatus());
-        if (errorPage == null) return;
-        try{
+        if (errorPage == null) {
+            return;
+        }
+        try {
             File file = new File(ERROR_RESOURCES_PATH + errorPage);
             body = FileReader.readAllBytes(file);
         } catch (IOException ioException) {

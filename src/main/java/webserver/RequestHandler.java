@@ -13,6 +13,7 @@ import http.HttpRequest;
 import http.HttpResponse;
 
 public class RequestHandler implements Runnable {
+
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
     private final Socket connection;
 
@@ -24,14 +25,14 @@ public class RequestHandler implements Runnable {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                 connection.getPort());
 
-        try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()){
+        try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             HttpRequest request = new HttpRequest(in);
             logger.debug("New Request : {}", request);
             HttpResponse response = new HttpResponse();
             DispatcherServlet dispatcherServlet = DispatcherServlet.getInstance();
             dispatcherServlet.doDispatch(request, response);
             ResponseWriter.writeTo(out, response);
-        }catch (IOException e) {
+        } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }

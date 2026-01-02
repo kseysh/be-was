@@ -5,7 +5,7 @@ public enum HttpHeader {
     CONTENT_TYPE("Content-Type"),
     LOCATION("Location");
 
-    private String value;
+    private final String value;
 
     HttpHeader(String value) {
         this.value = value;

@@ -5,6 +5,7 @@ import java.util.Map;
 import enums.HttpMethod;
 
 public class HttpRequestLine {
+
     private static final String REQUEST_LINE_SPACE = " ";
 
     private final HttpMethod method;
@@ -39,7 +40,7 @@ public class HttpRequestLine {
         this.path = path;
     }
 
-    public String toString(){
+    public String toString() {
         return this.method.name() + REQUEST_LINE_SPACE + this.path + REQUEST_LINE_SPACE + this.version;
     }
 }

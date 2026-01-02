@@ -6,11 +6,12 @@ import exception.NotFoundException;
 import http.HttpRequest;
 import http.HttpResponse;
 
-public class RegisterHandler implements Handler{
+public class RegisterHandler implements Handler {
 
     private static final RegisterHandler INSTANCE = new RegisterHandler();
 
-    private RegisterHandler() {}
+    private RegisterHandler() {
+    }
 
     public static RegisterHandler getInstance() {
         return INSTANCE;
@@ -20,7 +21,7 @@ public class RegisterHandler implements Handler{
     public void handle(HttpRequest request, HttpResponse response) throws HttpException {
         if (request.getMethod() == HttpMethod.GET) {
             get(request, response);
-        }else{
+        } else {
             throw new NotFoundException("Not Supported Method");
         }
     }
