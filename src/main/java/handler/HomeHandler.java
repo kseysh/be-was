@@ -27,7 +27,6 @@ public class HomeHandler implements Handler {
     }
 
     private void get(HttpRequest request, HttpResponse response) throws HttpException {
-        request.setPath("/index.html");
         StaticResourceHandler.getInstance().handle(request, response);
     }
 
