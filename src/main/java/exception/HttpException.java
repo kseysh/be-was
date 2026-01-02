@@ -2,11 +2,11 @@ package exception;
 
 import enums.HttpStatus;
 
-public class ErrorException extends RuntimeException{
+public class HttpException extends RuntimeException{
     private final HttpStatus status;
     private final String message;
 
-    public ErrorException(HttpStatus status, String message) {
+    public HttpException(HttpStatus status, String message) {
         this.status = status;
         this.message = message;
     }
