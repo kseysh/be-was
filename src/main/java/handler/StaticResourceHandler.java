@@ -4,6 +4,7 @@ import enums.ContentTypes;
 import enums.HttpHeader;
 import enums.HttpStatus;
 import exception.BadRequestException;
+import exception.HttpException;
 import exception.InternalServerErrorException;
 import exception.NotFoundException;
 import java.io.File;
@@ -19,7 +20,7 @@ public class StaticResourceHandler implements Handler {
     private static final String EMPTY_EXTENSION = "";
 
     @Override
-    public void handle(HttpRequest request, HttpResponse response) throws RuntimeException {
+    public void handle(HttpRequest request, HttpResponse response) throws HttpException {
         String path = request.getPath();
 
         byte[] body;

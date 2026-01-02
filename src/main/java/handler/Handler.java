@@ -1,8 +1,9 @@
 package handler;
 
+import exception.HttpException;
 import http.HttpRequest;
 import http.HttpResponse;
 
 public interface Handler {
-    void handle(HttpRequest request, HttpResponse response) throws RuntimeException;
+    void handle(HttpRequest request, HttpResponse response) throws HttpException;
 }
