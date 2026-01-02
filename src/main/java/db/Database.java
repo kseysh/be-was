@@ -1,13 +1,16 @@
 package db;
 
+import java.util.concurrent.ConcurrentHashMap;
 import model.User;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 
 public class Database {
-    private static Map<String, User> users = new HashMap<>();
+
+    private static final Map<String, User> users = new ConcurrentHashMap<>();
+
+    private Database(){}
 
     public static void addUser(User user) {
         users.put(user.getUserId(), user);

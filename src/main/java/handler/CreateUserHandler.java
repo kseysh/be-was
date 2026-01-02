@@ -17,8 +17,14 @@ import org.slf4j.LoggerFactory;
 
 public class CreateUserHandler implements Handler {
     private static final Logger logger = LoggerFactory.getLogger(CreateUserHandler.class);
+    private static final CreateUserHandler INSTANCE = new CreateUserHandler();
 
-    @Override
+    private CreateUserHandler() {}
+
+    public static CreateUserHandler getInstance() {
+        return INSTANCE;
+    }
+
     public void handle(HttpRequest request, HttpResponse response) throws HttpException {
         if(request.getMethod() == HttpMethod.GET) {
             get(request, response);
@@ -27,7 +33,7 @@ public class CreateUserHandler implements Handler {
         }
     }
 
-    public void get(HttpRequest request, HttpResponse response) throws HttpException {
+    private static void get(HttpRequest request, HttpResponse response) throws HttpException {
         Map<String, String> queries = request.getQuery();
         String userId = queries.get("userId");
         String password = queries.get("password");
@@ -48,7 +54,7 @@ public class CreateUserHandler implements Handler {
         response.setHeaders(headers);
     }
 
-    private void validateParameters(String userId, String password, String name, String email) throws HttpException {
+    private static void validateParameters(String userId, String password, String name, String email) throws HttpException {
         int requiredParameterCount = 0;
         StringBuilder sb = new StringBuilder();
 

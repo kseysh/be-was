@@ -19,6 +19,14 @@ public class StaticResourceHandler implements Handler {
     private static final String RESOURCES_PATH = "./src/main/resources/static";
     private static final String EMPTY_EXTENSION = "";
     private static final char EXTENSION_SEPARATOR = '.';
+    private static final StaticResourceHandler INSTANCE = new StaticResourceHandler();
+
+    private StaticResourceHandler() {}
+
+    public static StaticResourceHandler getInstance() {
+        return INSTANCE;
+    }
+
 
     @Override
     public void handle(HttpRequest request, HttpResponse response) throws HttpException {
@@ -38,6 +46,7 @@ public class StaticResourceHandler implements Handler {
         if(!extension.equals(EMPTY_EXTENSION)){
             headers.put(HttpHeader.CONTENT_TYPE.getValue(), getContentType(extension));
         }
+
         response.setStatusCode(HttpStatus.OK);
         response.setBody(body);
         response.setHeaders(headers);

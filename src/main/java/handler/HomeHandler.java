@@ -7,6 +7,15 @@ import http.HttpRequest;
 import http.HttpResponse;
 
 public class HomeHandler implements Handler {
+
+    private static final HomeHandler INSTANCE = new HomeHandler();
+
+    private HomeHandler() {}
+
+    public static HomeHandler getInstance() {
+        return INSTANCE;
+    }
+
     @Override
     public void handle(HttpRequest request, HttpResponse response) throws HttpException {
         if (request.getMethod() == HttpMethod.GET) {
@@ -18,7 +27,7 @@ public class HomeHandler implements Handler {
 
     private void get(HttpRequest request, HttpResponse response) throws HttpException {
         request.setPath("/index.html");
-        new StaticResourceHandler().handle(request, response);
+        StaticResourceHandler.getInstance().handle(request, response);
     }
 
 
