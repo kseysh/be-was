@@ -19,7 +19,7 @@ public class ExceptionResolver {
 
     private ExceptionResolver() {}
 
-    public static void resolve(HttpRequest request, HttpResponse response, ErrorException e) {
+    public static void resolve(HttpRequest request, HttpResponse response, HttpException e) {
         byte[] body;
 
         String errorPage = errorPageMapper.get(e.getStatus());

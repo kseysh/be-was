@@ -1,6 +1,6 @@
 package servlet;
 
-import exception.ErrorException;
+import exception.HttpException;
 import exception.ExceptionResolver;
 import handler.Handler;
 import handler.HandlerMapper;
@@ -21,7 +21,7 @@ public class DispatcherServlet {
         try{
             Handler handler = HandlerMapper.getHandler(request.getPath());
             handler.handle(request, response);
-        }catch (ErrorException e){
+        }catch (HttpException e){
             ExceptionResolver.resolve(request, response, e);
         }
     }
