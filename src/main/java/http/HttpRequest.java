@@ -1,5 +1,6 @@
 package http;
 
+import enums.HttpMethod;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,6 +29,10 @@ public class HttpRequest{
 
     public HttpRequestBody getBody() {
         return body;
+    }
+
+    public HttpMethod getMethod() {
+        return requestLine.getMethod();
     }
 
     public Map<String, String> getQuery() {

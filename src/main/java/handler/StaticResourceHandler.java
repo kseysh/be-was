@@ -3,6 +3,7 @@ package handler;
 import enums.ContentTypes;
 import enums.HttpHeader;
 import enums.HttpStatus;
+import exception.BadRequestException;
 import exception.InternalServerErrorException;
 import exception.NotFoundException;
 import java.io.File;
@@ -14,30 +15,25 @@ import http.HttpResponse;
 import util.FileReader;
 
 public class StaticResourceHandler implements Handler {
-    private static final String DEFAULT_PATH = "/index.html";
     private static final String RESOURCES_PATH = "./src/main/resources/static";
+    private static final String EMPTY_EXTENSION = "";
 
     @Override
     public void handle(HttpRequest request, HttpResponse response) throws RuntimeException {
         String path = request.getPath();
 
-        if(path.equals("/")) path = DEFAULT_PATH;
         byte[] body;
         try{
             File file = new File(RESOURCES_PATH + path);
-
-            if (file.exists() && file.isFile()) {
-                body = FileReader.readAllBytes(file);
-            }else{
-                throw new NotFoundException(path + " file not found");
-            }
+            validateFile(file, path);
+            body = FileReader.readAllBytes(file);
         } catch (IOException e) {
             throw new InternalServerErrorException(e.getMessage());
         }
 
         Map<String, String> headers = new HashMap<>();
         String extension = getFileExtension(path);
-        if(!extension.isEmpty()){
+        if(extension.equals(EMPTY_EXTENSION)){
             headers.put(HttpHeader.CONTENT_TYPE.getValue(), getContentType(extension));
         }
         response.setStatusCode(HttpStatus.OK);
@@ -46,14 +42,24 @@ public class StaticResourceHandler implements Handler {
         response.setVersion(request.getVersion());
     }
 
+    private void validateFile(File file, String path) throws IOException {
+        if(!file.exists()){
+            throw new NotFoundException(path + " file not found");
+        }
+
+        if(!file.isFile()){
+            throw new BadRequestException(path + " file is not a file");
+        }
+    }
+
     private String getContentType(String extension) {
         return ContentTypes.from(extension).getMimeType();
     }
 
     private String getFileExtension(String path) {
-        if (path == null) return "";
+        if (path == null) return EMPTY_EXTENSION;
         int lastDotIndex = path.lastIndexOf('.');
-        if (lastDotIndex == -1 || lastDotIndex == path.length() - 1) return "";
+        if (lastDotIndex == -1 || lastDotIndex == path.length() - 1) return EMPTY_EXTENSION;
         return path.substring(lastDotIndex + 1);
     }
 }

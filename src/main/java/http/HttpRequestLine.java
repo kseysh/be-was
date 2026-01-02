@@ -76,6 +76,10 @@ public class HttpRequestLine {
         return queries;
     }
 
+    public HttpMethod getMethod() {
+        return method;
+    }
+
     public String toString(){
         return this.method.name() + REQUEST_LINE_SPACE + this.path + REQUEST_LINE_SPACE + this.version;
     }

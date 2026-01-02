@@ -7,16 +7,18 @@ public class HandlerMapper {
     private static Map<String, Handler> handlers;
     private static boolean isInit = false;
     private static final String DEFAULT_PATH = "/";
+
     private HandlerMapper() {}
 
     private static void initMapping() {
         handlers = Map.of(
                 "/create", new CreateUserHandler(),
                 "/registration", new RegisterHandler(),
-                "/", new StaticResourceHandler()
+                "/", new HomeHandler()
         );
     }
 
+    // TODO: 테스트 코드로 정상적인 동작하는지 체크
     public static Handler getHandler(String path){
         if(!isInit){
             initMapping();
