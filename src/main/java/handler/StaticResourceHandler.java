@@ -18,6 +18,7 @@ import util.FileReader;
 public class StaticResourceHandler implements Handler {
     private static final String RESOURCES_PATH = "./src/main/resources/static";
     private static final String EMPTY_EXTENSION = "";
+    private static final char EXTENSION_SEPARATOR = '.';
 
     @Override
     public void handle(HttpRequest request, HttpResponse response) throws HttpException {
@@ -34,7 +35,7 @@ public class StaticResourceHandler implements Handler {
 
         Map<String, String> headers = new HashMap<>();
         String extension = getFileExtension(path);
-        if(extension.equals(EMPTY_EXTENSION)){
+        if(!extension.equals(EMPTY_EXTENSION)){
             headers.put(HttpHeader.CONTENT_TYPE.getValue(), getContentType(extension));
         }
         response.setStatusCode(HttpStatus.OK);
@@ -59,8 +60,8 @@ public class StaticResourceHandler implements Handler {
 
     private String getFileExtension(String path) {
         if (path == null) return EMPTY_EXTENSION;
-        int lastDotIndex = path.lastIndexOf('.');
-        if (lastDotIndex == -1 || lastDotIndex == path.length() - 1) return EMPTY_EXTENSION;
-        return path.substring(lastDotIndex + 1);
+        int separatorIndex = path.lastIndexOf(EXTENSION_SEPARATOR);
+        if (separatorIndex == -1 || separatorIndex == path.length() - 1) return EMPTY_EXTENSION;
+        return path.substring(separatorIndex + 1);
     }
 }
