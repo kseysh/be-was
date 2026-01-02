@@ -55,47 +55,8 @@ public class CreateUserHandler implements Handler {
     }
 
     private static void validateParameters(String userId, String password, String name, String email) throws HttpException {
-        int requiredParameterCount = 0;
-        StringBuilder sb = new StringBuilder();
-
-        if(userId == null){
-            sb.append("userId");
-            requiredParameterCount++;
-        }
-
-        if(password == null){
-            if(requiredParameterCount == 0){
-                sb.append("password");
-            }else{
-                sb.append(", password");
-            }
-            requiredParameterCount++;
-        }
-
-        if(name == null){
-            if(requiredParameterCount == 0){
-                sb.append("name");
-            }else{
-                sb.append(", name");
-            }
-            requiredParameterCount++;
-        }
-
-        if(email == null){
-            if(requiredParameterCount == 0){
-                sb.append("email");
-            }else{
-                sb.append(", email");
-            }
-        }
-
-        if(requiredParameterCount != 0){
-            if(requiredParameterCount == 1){
-                sb.append("is required");
-            }else{
-                sb.append("are required");
-            }
-            throw new BadRequestException(sb.toString());
+        if(userId == null || password == null || name == null || email == null) {
+            throw new BadRequestException("parameters are missing");
         }
     }
 }
