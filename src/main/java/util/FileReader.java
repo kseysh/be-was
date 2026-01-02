@@ -6,7 +6,8 @@ import java.io.IOException;
 
 public class FileReader {
 
-    private FileReader() {}
+    private FileReader() {
+    }
 
     public static byte[] readAllBytes(File file) throws IOException {
         int fileLength = (int) file.length();
@@ -16,10 +17,7 @@ public class FileReader {
             int offset = 0;
             int numRead;
 
-            while (
-                    offset < bytes.length &&
-                            (numRead = fis.read(bytes, offset, bytes.length - offset)) >= 0
-            ) {
+            while (offset < bytes.length && (numRead = fis.read(bytes, offset, bytes.length - offset)) >= 0) {
                 offset += numRead;
             }
         }
