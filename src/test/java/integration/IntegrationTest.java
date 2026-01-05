@@ -1,9 +1,12 @@
 package integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 
+import enums.ContentTypes;
+import enums.HttpHeader;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -37,18 +40,113 @@ class IntegrationTest {
         Thread.sleep(500);
     }
 
-    @DisplayName("index.html을 반환할 수 있다")
     @Test
-    void index() throws Exception {
+    @DisplayName("index.html을 반환할 수 있다")
+    void returnHtmlFile() throws Exception {
+        // given
+        String path = "/index.html";
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(TEST_URL + "/index.html"))
+                .uri(URI.create(TEST_URL + path))
                 .GET()
                 .build();
 
+        // when
         HttpResponse<byte[]> response = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
 
+        // then
         assertThat(response.statusCode()).isEqualTo(200);
-        assertThat(response.body()).isEqualTo(getStaticResource("/index.html"));
+        assertThat(response.body()).isEqualTo(getStaticResource(path));
+        assertEquals(
+                response.headers().map().get(HttpHeader.CONTENT_TYPE.getValue()).get(0),
+                ContentTypes.TEXT_HTML.getMimeType()
+        );
+    }
+
+    @Test
+    @DisplayName("main.css를 반환할 수 있다")
+    void returnCssFile() throws Exception {
+        // given
+        String path = "/main.css";
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(TEST_URL + path))
+                .GET()
+                .build();
+
+        // when
+        HttpResponse<byte[]> response = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(200);
+        assertThat(response.body()).isEqualTo(getStaticResource(path));
+        assertEquals(
+                response.headers().map().get(HttpHeader.CONTENT_TYPE.getValue()).get(0),
+                ContentTypes.TEXT_CSS.getMimeType()
+        );
+    }
+
+    @Test
+    @DisplayName("회원가입 페이지로 이동할 수 있다.")
+    void registrationPageTest() throws Exception {
+        // given
+        String path = "/registration";
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(TEST_URL + path))
+                .GET()
+                .build();
+
+        // when
+        HttpResponse<byte[]> response = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(200);
+        assertThat(response.body()).isEqualTo(getStaticResource(path + "/index.html"));
+        assertEquals(
+                response.headers().map().get(HttpHeader.CONTENT_TYPE.getValue()).get(0),
+                ContentTypes.TEXT_HTML.getMimeType()
+        );
+    }
+
+    @Test
+    @DisplayName("GET으로 회원가입을 진행할 수 있다.")
+    void registerUserTest() throws Exception {
+        // given
+        String path = "/create";
+        String userId = "javajigi";
+        String password = "testPassword";
+        String name = "%EB%B0%95%EC%9E%AC%EC%84%B1";
+        String email = "javajigi%40slipp.net";
+        String queryFormat = "?userId=%s&password=%s&name=%s&email=%s";
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(TEST_URL + path + queryFormat.formatted(userId, password, name, email)))
+                .GET()
+                .build();
+
+        // when
+        HttpResponse<byte[]> response = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(302);
+    }
+
+    @Test
+    @DisplayName("Email이 존재하지 않아도 회원가입을 진행할 수 있다.")
+    void registerUserWithoutEmailTest() throws Exception {
+        // given
+        String path = "/create";
+        String userId = "javajigi";
+        String password = "testPassword";
+        String name = "%EB%B0%95%EC%9E%AC%EC%84%B1";
+        String queryFormat = "?userId=%s&password=%s&name=%s&";
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(TEST_URL + path + queryFormat.formatted(userId, password, name)))
+                .GET()
+                .build();
+
+        // when
+        HttpResponse<byte[]> response = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(302);
     }
 
     private byte[] getStaticResource(String path) throws IOException {
