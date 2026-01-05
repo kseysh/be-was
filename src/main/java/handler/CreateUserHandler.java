@@ -1,6 +1,7 @@
 package handler;
 
 import db.Database;
+import enums.ContentTypes;
 import enums.HttpHeader;
 import enums.HttpMethod;
 import enums.HttpStatus;
@@ -42,7 +43,7 @@ public class CreateUserHandler implements Handler {
         String name = queries.get("name");
         String email = queries.get("email");
 
-        validateParameters(userId, password, name, email);
+        validateParameters(userId, password, name);
 
         User user = new User(userId, password, name, email);
         Database.addUser(user);
@@ -52,13 +53,13 @@ public class CreateUserHandler implements Handler {
         response.setStatusCode(HttpStatus.FOUND);
         Map<String, String> headers = new HashMap<>();
         headers.put(HttpHeader.LOCATION.getValue(), "/index.html");
-        headers.put(HttpHeader.CONTENT_TYPE.getValue(), "text/html");
+        headers.put(HttpHeader.CONTENT_TYPE.getValue(), ContentTypes.TEXT_HTML.getMimeType());
         response.setHeaders(headers);
     }
 
-    private static void validateParameters(String userId, String password, String name, String email)
+    private static void validateParameters(String userId, String password, String name)
             throws HttpException {
-        if (userId == null || password == null || name == null || email == null) {
+        if (userId == null || password == null || name == null) {
             throw new BadRequestException("parameters are missing");
         }
     }
