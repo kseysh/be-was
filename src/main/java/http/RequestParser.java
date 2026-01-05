@@ -1,8 +1,8 @@
 package http;
 
 import enums.HttpMethod;
-import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,10 +22,10 @@ public class RequestParser {
     private final HttpHeaders headers;
     private final HttpRequestBody body;
 
-    public RequestParser(BufferedReader br) throws IOException {
-        this.requestLine = parseRequestLine(br);
-        this.headers = parseHeaders(br);
-        this.body = parseRequestBody(br, headers.getContentLength());
+    public RequestParser(InputStream in) throws IOException {
+        this.requestLine = parseRequestLine(in);
+        this.headers = parseHeaders(in);
+        this.body = parseRequestBody(in, headers.getContentLength());
     }
 
     public HttpRequestLine getRequestLine() {
@@ -40,31 +40,31 @@ public class RequestParser {
         return body;
     }
 
-    private HttpHeaders parseHeaders(BufferedReader br) throws IOException {
-        String line;
-        Map<String, String[]> headerMap = new HashMap<>();
-        while ((line = br.readLine()) != null && !line.isEmpty()) {
-            String[] pair = line.split(HEADER_KEY_DELIMITER, 2);
-            if (pair.length == 2) {
-                String headerKey = pair[0].trim();
-                String[] headerValues = pair[1].trim().split(HEADER_VALUE_DELIMITER);
-                headerMap.put(headerKey, headerValues);
+    private String readLine(InputStream in) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        int b;
+        while ((b = in.read()) != -1) {
+            if (b == '\r') {
+                int next = in.read();
+                if (next == '\n') break;
+                sb.append((char) b).append((char) next);
+            } else {
+                sb.append((char) b);
             }
         }
-
-        return new HttpHeaders(headerMap);
+        String line = sb.toString();
+        return line.isEmpty() && b == -1 ? null : line;
     }
 
-    private HttpRequestLine parseRequestLine(BufferedReader br) throws IOException {
-        String requestLineString = br.readLine();
-        if (requestLineString == null || requestLineString.isEmpty()) {
+    private HttpRequestLine parseRequestLine(InputStream in) throws IOException {
+        String line = readLine(in);
+        if (line == null || line.isEmpty()) {
             throw new IllegalArgumentException("Empty request line");
         }
 
-        String[] parts = requestLineString.strip().split(REQUEST_LINE_SPACE);
-
+        String[] parts = line.strip().split(REQUEST_LINE_SPACE);
         if (parts.length != REQUEST_LINE_LENGTH) {
-            throw new IllegalArgumentException("Malformed request line: " + requestLineString);
+            throw new IllegalArgumentException("Malformed request line: " + line);
         }
 
         HttpMethod method = HttpMethod.valueOf(parts[0]);
@@ -73,6 +73,36 @@ public class RequestParser {
         Map<String, String> queries = extractQueries(parts[1]);
 
         return new HttpRequestLine(method, path, version, queries);
+    }
+
+    private HttpHeaders parseHeaders(InputStream in) throws IOException {
+        String line;
+        Map<String, String[]> headerMap = new HashMap<>();
+        while ((line = readLine(in)) != null && !line.isEmpty()) {
+            String[] pair = line.split(HEADER_KEY_DELIMITER, 2);
+            if (pair.length == 2) {
+                String headerKey = pair[0].trim();
+                String[] headerValues = pair[1].trim().split(HEADER_VALUE_DELIMITER);
+                headerMap.put(headerKey, headerValues);
+            }
+        }
+        return new HttpHeaders(headerMap);
+    }
+
+    private HttpRequestBody parseRequestBody(InputStream in, int length) throws IOException {
+        if (length <= 0) {
+            return new HttpRequestBody(new byte[0]);
+        }
+
+        byte[] buffer = new byte[length];
+        int totalRead = 0;
+        while (totalRead < length) {
+            int read = in.read(buffer, totalRead, length - totalRead);
+            if (read == -1) break;
+            totalRead += read;
+        }
+
+        return new HttpRequestBody(buffer);
     }
 
     private static String extractPath(String fullPath) {
@@ -99,24 +129,5 @@ public class RequestParser {
 
         }
         return queryMap;
-    }
-
-    // TODO: body를 BufferedReader로 하는 것은 메모리 성능이 좋지 않고 성능상 비효율적임
-    private HttpRequestBody parseRequestBody(BufferedReader br, int length) throws IOException {
-        if (length == 0) {
-            return new HttpRequestBody(new byte[0]);
-        }
-
-        char[] buffer = new char[length];
-        int totalRead = 0;
-        while (totalRead < length) {
-            int read = br.read(buffer, totalRead, length - totalRead);
-            if (read == -1) {
-                break;
-            }
-            totalRead += read;
-        }
-
-        return new HttpRequestBody(String.valueOf(buffer).getBytes());
     }
 }

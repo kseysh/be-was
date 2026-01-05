@@ -22,6 +22,10 @@ public class HttpHeaders {
         return Integer.parseInt(values[0]);
     }
 
+    public Map<String, String[]> getHeaders(){
+        return headers;
+    }
+
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (Map.Entry<String, String[]> entry : headers.entrySet()) {

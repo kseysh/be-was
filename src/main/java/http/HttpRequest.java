@@ -1,10 +1,8 @@
 package http;
 
 import enums.HttpMethod;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.Map;
 
 public class HttpRequest {
@@ -14,8 +12,7 @@ public class HttpRequest {
     private final HttpRequestBody body;
 
     public HttpRequest(InputStream in) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(in));
-        RequestParser parser = new RequestParser(br);
+        RequestParser parser = new RequestParser(in);
         requestLine = parser.getRequestLine();
         headers = parser.getHeaders();
         body = parser.getBody();
@@ -47,8 +44,8 @@ public class HttpRequest {
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(requestLine.toString()).append("\n");
-        sb.append(headers.toString()).append("\n");
+        sb.append(requestLine.toString());
+        sb.append(headers.toString());
         sb.append(body.toString());
         return sb.toString();
     }
