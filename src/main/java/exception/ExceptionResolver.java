@@ -13,6 +13,7 @@ import util.FileReader;
 public class ExceptionResolver {
 
     private static final String ERROR_RESOURCES_PATH = "./src/main/resources/static/error";
+    private static final String DEFAULT_ERROR_PAGE = "/500.html";
     private static final Map<HttpStatus, String> errorPageMapper = Map.of(
             HttpStatus.INTERNAL_SERVER_ERROR, "/500.html",
             HttpStatus.NOT_FOUND, "/404.html"
@@ -26,7 +27,7 @@ public class ExceptionResolver {
 
         String errorPage = errorPageMapper.get(e.getStatus());
         if (errorPage == null) {
-            return;
+            errorPage = DEFAULT_ERROR_PAGE;
         }
         try {
             File file = new File(ERROR_RESOURCES_PATH + errorPage);
