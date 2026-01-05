@@ -26,6 +26,9 @@ public class ResponseWriter {
 
             writeStatusLine(dos, response);
             writeHeaders(dos, response);
+
+            dos.writeBytes(CRLF);
+
             writeBody(dos, response);
 
             dos.flush();
