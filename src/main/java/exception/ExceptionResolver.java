@@ -33,7 +33,7 @@ public class ExceptionResolver {
             File file = new File(ERROR_RESOURCES_PATH + errorPage);
             body = FileReader.readAllBytes(file);
         } catch (IOException ioException) {
-            return;
+            body = new byte[0];
         }
 
         Map<String, String> headers = Map.of(
