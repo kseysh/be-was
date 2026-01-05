@@ -22,7 +22,7 @@ public class HttpHeaders {
         return Integer.parseInt(values[0]);
     }
 
-    public Map<String, String[]> getHeaders(){
+    public Map<String, String[]> getHeaders() {
         return headers;
     }
 

@@ -19,7 +19,6 @@ public class HandlerMapper {
         );
     }
 
-    // TODO: 테스트 코드로 정상적인 동작하는지 체크
     public static Handler getHandler(String path) {
         if (!isInit) {
             initMapping();

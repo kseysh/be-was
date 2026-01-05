@@ -25,7 +25,6 @@ public enum ContentTypes {
     }
 
     public static ContentTypes from(String extension) {
-
         for (ContentTypes contentType : ContentTypes.values()) {
             if (contentType.extension.equals(extension)) {
                 return contentType;
@@ -38,9 +37,4 @@ public enum ContentTypes {
     public String getMimeType() {
         return mimeType;
     }
-
-    public String getExtension() {
-        return extension;
-    }
-
 }

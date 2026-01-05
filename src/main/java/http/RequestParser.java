@@ -46,7 +46,9 @@ public class RequestParser {
         while ((b = in.read()) != -1) {
             if (b == '\r') {
                 int next = in.read();
-                if (next == '\n') break;
+                if (next == '\n') {
+                    break;
+                }
                 sb.append((char) b).append((char) next);
             } else {
                 sb.append((char) b);
@@ -98,7 +100,9 @@ public class RequestParser {
         int totalRead = 0;
         while (totalRead < length) {
             int read = in.read(buffer, totalRead, length - totalRead);
-            if (read == -1) break;
+            if (read == -1) {
+                break;
+            }
             totalRead += read;
         }
 
