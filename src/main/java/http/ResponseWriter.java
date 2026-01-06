@@ -63,7 +63,6 @@ public class ResponseWriter {
     private static void writeBody(DataOutputStream dos, HttpResponse response) throws IOException {
         byte[] body = response.getBody();
         if (body != null && body.length > 0) {
-            dos.writeBytes(CRLF);
             dos.write(body, 0, body.length);
         }
     }
