@@ -66,7 +66,7 @@ public class StaticResourceHandler implements Handler {
     }
 
     private String getContentType(String extension) {
-        return ContentTypes.from(extension).getMimeType();
+        return ContentTypes.fromExtension(extension).getMimeType();
     }
 
     private String getFileExtension(String path) {

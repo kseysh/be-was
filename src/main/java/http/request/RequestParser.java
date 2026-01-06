@@ -1,7 +1,6 @@
 package http.request;
 
 import enums.HttpMethod;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLDecoder;
@@ -9,6 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import util.StreamUtils;
 
 public class RequestParser {
 
@@ -43,27 +43,8 @@ public class RequestParser {
         return body;
     }
 
-    private String readLine(InputStream in) throws IOException {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        int b;
-        while ((b = in.read()) != -1) {
-            if (b == '\r') {
-                int next = in.read();
-                if (next == '\n') {
-                    break;
-                }
-                bos.write(b);
-                bos.write(next);
-            } else {
-                bos.write(b);
-            }
-        }
-        if (bos.size() == 0 && b == -1) return "";
-        return bos.toString(StandardCharsets.UTF_8);
-    }
-
     private HttpRequestLine parseRequestLine(InputStream in) throws IOException {
-        String line = readLine(in);
+        String line = StreamUtils.copyToString(in, StandardCharsets.UTF_8);
         if (line == null || line.isEmpty()) {
             throw new IllegalArgumentException("Empty request line");
         }
@@ -84,7 +65,7 @@ public class RequestParser {
     private HttpHeaders parseHeaders(InputStream in) throws IOException {
         String line;
         Map<String, String[]> headerMap = new HashMap<>();
-        while ((line = readLine(in)) != null && !line.isEmpty()) {
+        while ((line = StreamUtils.copyToString(in, StandardCharsets.UTF_8)) != null && !line.isEmpty()) {
             String[] pair = line.split(HEADER_KEY_DELIMITER, 2);
             if (pair.length == 2) {
                 String headerKey = pair[0].trim();
@@ -100,17 +81,8 @@ public class RequestParser {
             return new HttpRequestBody(new byte[0]);
         }
 
-        byte[] buffer = new byte[length];
-        int totalRead = 0;
-        while (totalRead < length) {
-            int read = in.read(buffer, totalRead, length - totalRead);
-            if (read == -1) {
-                break;
-            }
-            totalRead += read;
-        }
-
-        return new HttpRequestBody(buffer);
+        byte[] body = StreamUtils.copyToByteArray(in, length);
+        return new HttpRequestBody(body);
     }
 
     private static String extractPath(String fullPath) {
