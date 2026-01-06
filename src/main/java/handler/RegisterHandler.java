@@ -3,8 +3,8 @@ package handler;
 import enums.HttpMethod;
 import exception.HttpException;
 import exception.NotFoundException;
-import http.HttpRequest;
-import http.HttpResponse;
+import http.request.HttpRequest;
+import http.response.HttpResponse;
 
 public class RegisterHandler implements Handler {
 

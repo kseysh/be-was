@@ -1,4 +1,4 @@
-package http;
+package http.request;
 
 import enums.HttpHeader;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package http;
+package http.response;
 
 import enums.HttpStatus;
 import java.util.Map;

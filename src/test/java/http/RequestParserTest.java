@@ -3,6 +3,10 @@ package http;
 import static fixture.HttpRequestFixture.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.assertj.core.api.Assertions.assertThat;
+
+import http.request.HttpRequest;
+import http.request.HttpRequestLine;
+import http.request.RequestParser;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;

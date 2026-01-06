@@ -1,7 +1,10 @@
 package webserver;
 
-import http.RequestParser;
-import http.ResponseWriter;
+import http.request.RequestParser;
+import http.response.ResponseWriter;
+import http.request.HttpRequest;
+import http.response.HttpResponse;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -9,9 +12,6 @@ import java.net.Socket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import servlet.DispatcherServlet;
-
-import http.HttpRequest;
-import http.HttpResponse;
 
 public class RequestHandler implements Runnable {
 

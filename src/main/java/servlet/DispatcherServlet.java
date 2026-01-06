@@ -4,8 +4,8 @@ import exception.HttpException;
 import exception.ExceptionResolver;
 import handler.Handler;
 import handler.HandlerMapper;
-import http.HttpRequest;
-import http.HttpResponse;
+import http.request.HttpRequest;
+import http.response.HttpResponse;
 
 public class DispatcherServlet {
 

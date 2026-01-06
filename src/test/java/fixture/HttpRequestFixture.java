@@ -3,10 +3,10 @@ package fixture;
 import enums.ContentTypes;
 import enums.HttpHeader;
 import enums.HttpMethod;
-import http.HttpHeaders;
-import http.HttpRequest;
-import http.HttpRequestBody;
-import http.HttpRequestLine;
+import http.request.HttpHeaders;
+import http.request.HttpRequest;
+import http.request.HttpRequestBody;
+import http.request.HttpRequestLine;
 import java.util.Map;
 
 public class HttpRequestFixture {

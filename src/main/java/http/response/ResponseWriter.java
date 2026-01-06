@@ -1,4 +1,4 @@
-package http;
+package http.response;
 
 import enums.HttpHeader;
 import enums.HttpStatus;

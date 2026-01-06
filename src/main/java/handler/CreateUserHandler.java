@@ -8,8 +8,8 @@ import enums.HttpStatus;
 import exception.BadRequestException;
 import exception.HttpException;
 import exception.NotFoundException;
-import http.HttpRequest;
-import http.HttpResponse;
+import http.request.HttpRequest;
+import http.response.HttpResponse;
 import java.util.HashMap;
 import java.util.Map;
 import model.User;
@@ -29,14 +29,14 @@ public class CreateUserHandler implements Handler {
     }
 
     public void handle(HttpRequest request, HttpResponse response) throws HttpException {
-        if (request.getMethod() == HttpMethod.GET) {
-            get(request, response);
+        if (request.getMethod() == HttpMethod.POST) {
+            post(request, response);
         } else {
             throw new NotFoundException("Not Supported Method");
         }
     }
 
-    private static void get(HttpRequest request, HttpResponse response) throws HttpException {
+    private static void post(HttpRequest request, HttpResponse response) throws HttpException {
         Map<String, String> queries = request.getQuery();
         String userId = queries.get("userId");
         String password = queries.get("password");

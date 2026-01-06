@@ -4,9 +4,9 @@ import static fixture.HttpRequestFixture.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import enums.HttpMethod;
-import http.HttpRequest;
-import http.HttpRequestLine;
-import http.HttpResponse;
+import http.request.HttpRequest;
+import http.request.HttpRequestLine;
+import http.response.HttpResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
