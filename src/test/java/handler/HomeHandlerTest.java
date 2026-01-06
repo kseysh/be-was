@@ -1,0 +1,35 @@
+package handler;
+
+import static fixture.HttpRequestFixture.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import enums.HttpMethod;
+import http.HttpRequest;
+import http.HttpRequestLine;
+import http.HttpResponse;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+class HomeHandlerTest {
+
+    @Test
+    @DisplayName("기본 경로(/)를 보내면 /index.html로 변환하여 반환한다.")
+    void homeHandlerTest(){
+        // given
+        String requestPath = "/";
+        String expectedPath = "/index.html";
+        HttpRequestLine requestLine = new HttpRequestLine(
+                HttpMethod.GET,
+                requestPath,
+                DEFAULT_VERSION,
+                DEFAULT_QUERIES
+        );
+        HttpRequest request = new HttpRequest(requestLine, DEFAULT_HTTP_HEADERS, DEFAULT_HTTP_REQUEST_BODY);
+
+        // when
+        HomeHandler.getInstance().handle(request, new HttpResponse());
+
+        // then
+        assertEquals(expectedPath, request.getPath());
+    }
+}
