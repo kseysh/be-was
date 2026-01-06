@@ -1,8 +1,11 @@
 package http;
 
 import enums.HttpMethod;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,7 +44,7 @@ public class RequestParser {
     }
 
     private String readLine(InputStream in) throws IOException {
-        StringBuilder sb = new StringBuilder();
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
         int b;
         while ((b = in.read()) != -1) {
             if (b == '\r') {
@@ -49,13 +52,14 @@ public class RequestParser {
                 if (next == '\n') {
                     break;
                 }
-                sb.append((char) b).append((char) next);
+                bos.write(b);
+                bos.write(next);
             } else {
-                sb.append((char) b);
+                bos.write(b);
             }
         }
-        String line = sb.toString();
-        return line.isEmpty() && b == -1 ? null : line;
+        if (bos.size() == 0 && b == -1) return "";
+        return bos.toString(StandardCharsets.UTF_8);
     }
 
     private HttpRequestLine parseRequestLine(InputStream in) throws IOException {
@@ -111,7 +115,8 @@ public class RequestParser {
 
     private static String extractPath(String fullPath) {
         int queryIndex = fullPath.indexOf(QUERY_SEPARATOR);
-        return queryIndex == -1 ? fullPath : fullPath.substring(0, queryIndex);
+        String path = queryIndex == -1 ? fullPath : fullPath.substring(0, queryIndex);
+        return URLDecoder.decode(path, StandardCharsets.UTF_8);
     }
 
     private static Map<String, String> extractQueries(String fullPath) {
@@ -129,8 +134,10 @@ public class RequestParser {
             if (keyValue.length < 2) {
                 throw new IllegalArgumentException("Malformed query: " + query);
             }
-            queryMap.put(keyValue[0], keyValue[1]);
 
+            String decodedKey = URLDecoder.decode(keyValue[0], StandardCharsets.UTF_8);
+            String decodedValue = URLDecoder.decode(keyValue[1], StandardCharsets.UTF_8);
+            queryMap.put(decodedKey, decodedValue);
         }
         return queryMap;
     }
