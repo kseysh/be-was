@@ -1,5 +1,6 @@
 package integration;
 
+import static java.net.http.HttpRequest.BodyPublishers.ofByteArray;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -107,46 +108,69 @@ class IntegrationTest {
     }
 
     @Test
-    @DisplayName("GET으로 회원가입을 진행할 수 있다.")
+    @DisplayName("POST로 회원가입을 진행할 수 있다.")
     void registerUserTest() throws Exception {
         // given
-        String path = "/create";
+        String path = "/user/create";
         String userId = "javajigi";
         String password = "testPassword";
-        String name = "%EB%B0%95%EC%9E%AC%EC%84%B1";
+        String name = "테스트이름";
         String email = "javajigi%40slipp.net";
-        String queryFormat = "?userId=%s&password=%s&name=%s&email=%s";
+        String queryFormat = "userId=%s&password=%s&name=%s&email=%s";
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(TEST_URL + path + queryFormat.formatted(userId, password, name, email)))
-                .GET()
+                .uri(URI.create(TEST_URL + path))
+                .header(HttpHeader.CONTENT_TYPE.getValue(), ContentTypes.APPLICATION_FORM_URL_ENCODED.getMimeType())
+                .POST(ofByteArray(queryFormat.formatted(userId, password, name, email).getBytes()))
                 .build();
 
         // when
         HttpResponse<byte[]> response = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
 
         // then
-        assertThat(response.statusCode()).isEqualTo(Integer.parseInt(HttpStatus.FOUND.getResponseCode()));
+        assertThat(Integer.parseInt(HttpStatus.FOUND.getResponseCode())).isEqualTo(response.statusCode());
     }
 
     @Test
     @DisplayName("Email이 존재하지 않아도 회원가입을 진행할 수 있다.")
     void registerUserWithoutEmailTest() throws Exception {
         // given
-        String path = "/create";
+        String path = "/user/create";
         String userId = "javajigi";
         String password = "testPassword";
-        String name = "%EB%B0%95%EC%9E%AC%EC%84%B1";
-        String queryFormat = "?userId=%s&password=%s&name=%s&";
+        String name = "테스트이름";
+        String queryFormat = "userId=%s&password=%s&name=%s";
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(TEST_URL + path + queryFormat.formatted(userId, password, name)))
-                .GET()
+                .uri(URI.create(TEST_URL + path))
+                .header(HttpHeader.CONTENT_TYPE.getValue(), ContentTypes.APPLICATION_FORM_URL_ENCODED.getMimeType())
+                .POST(ofByteArray(queryFormat.formatted(userId, password, name).getBytes()))
                 .build();
 
         // when
         HttpResponse<byte[]> response = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
 
         // then
-        assertThat(response.statusCode()).isEqualTo(Integer.parseInt(HttpStatus.FOUND.getResponseCode()));
+        assertThat(Integer.parseInt(HttpStatus.FOUND.getResponseCode())).isEqualTo(response.statusCode());
+    }
+
+    @Test
+    @DisplayName("UserId 없이 회원가입을 진행하면, 400 Error를 반환한다.")
+    void registerUserWithoutUserIdTest() throws Exception {
+        // given
+        String path = "/user/create";
+        String password = "testPassword";
+        String name = "테스트이름";
+        String queryFormat = "password=%s&name=%s";
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(TEST_URL + path))
+                .header(HttpHeader.CONTENT_TYPE.getValue(), ContentTypes.APPLICATION_FORM_URL_ENCODED.getMimeType())
+                .POST(ofByteArray(queryFormat.formatted(password, name).getBytes()))
+                .build();
+
+        // when
+        HttpResponse<byte[]> response = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
+
+        // then
+        assertThat(Integer.parseInt(HttpStatus.BAD_REQUEST.getResponseCode())).isEqualTo(response.statusCode());
     }
 
     private byte[] getStaticResource(String path) throws IOException {
