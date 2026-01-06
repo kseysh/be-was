@@ -8,6 +8,9 @@ import enums.HttpStatus;
 import exception.BadRequestException;
 import exception.HttpException;
 import exception.NotFoundException;
+import http.converter.Form;
+import http.converter.FormHttpMessageConverter;
+import http.converter.HttpMessageConverter;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import java.util.HashMap;
@@ -37,11 +40,17 @@ public class CreateUserHandler implements Handler {
     }
 
     private static void post(HttpRequest request, HttpResponse response) throws HttpException {
-        Map<String, String> queries = request.getQuery();
-        String userId = queries.get("userId");
-        String password = queries.get("password");
-        String name = queries.get("name");
-        String email = queries.get("email");
+        HttpMessageConverter<Form<String, String>> converter = new FormHttpMessageConverter();
+        if(!converter.canRead(Form.class, request.getContentType())){
+            logger.warn("Not Supported Method");
+            throw new BadRequestException("Not Supported ContentType");
+        }
+        Form<String, String> form = converter.read(request);
+
+        String userId = form.get("userId");
+        String password = form.get("password");
+        String name = form.get("name");
+        String email = form.get("email");
 
         validateParameters(userId, password, name);
 

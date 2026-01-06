@@ -1,5 +1,6 @@
 package http.request;
 
+import enums.ContentTypes;
 import enums.HttpHeader;
 import java.util.Map;
 import java.util.StringJoiner;
@@ -41,5 +42,16 @@ public class HttpHeaders {
             sb.append(REQUEST_HEADER_FORMAT.formatted(header.getKey(), sj.toString()));
         }
         return sb.toString();
+    }
+
+    public ContentTypes getContentType() {
+        String[] headerValues = headers.get(HttpHeader.CONTENT_TYPE.getValue());
+        String headerValue;
+        if (headerValues == null || headerValues.length == 0) {
+            headerValue = null;
+        }else{
+            headerValue = headerValues[0];
+        }
+        return ContentTypes.fromMimeType(headerValue);
     }
 }

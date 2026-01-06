@@ -1,5 +1,6 @@
 package http.request;
 
+import enums.ContentTypes;
 import enums.HttpMethod;
 import java.util.Map;
 
@@ -35,6 +36,10 @@ public class HttpRequest {
 
     public Map<String, String> getQuery() {
         return requestLine.getQueries();
+    }
+
+    public ContentTypes getContentType() {
+        return headers.getContentType();
     }
 
     public void setPath(String path) {
