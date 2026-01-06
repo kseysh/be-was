@@ -153,7 +153,7 @@ class IntegrationTest {
     }
 
     @Test
-    @DisplayName("UserId 없이 회원가입을 진행하면, 400 Error를 반환한다.")
+    @DisplayName("UserId Parameter 없이 회원가입을 진행하면, 400 Error를 반환한다.")
     void registerUserWithoutUserIdTest() throws Exception {
         // given
         String path = "/user/create";
@@ -164,6 +164,48 @@ class IntegrationTest {
                 .uri(URI.create(TEST_URL + path))
                 .header(HttpHeader.CONTENT_TYPE.getValue(), ContentTypes.APPLICATION_FORM_URL_ENCODED.getMimeType())
                 .POST(ofByteArray(queryFormat.formatted(password, name).getBytes()))
+                .build();
+
+        // when
+        HttpResponse<byte[]> response = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
+
+        // then
+        assertThat(Integer.parseInt(HttpStatus.BAD_REQUEST.getResponseCode())).isEqualTo(response.statusCode());
+    }
+
+    @Test
+    @DisplayName("Name Parameter 없이 회원가입을 진행하면, 400 Error를 반환한다.")
+    void registerUserWithoutNameest() throws Exception {
+        // given
+        String path = "/user/create";
+        String userId = "javajigi";
+        String password = "testPassword";
+        String queryFormat = "userId=%s&password=%s";
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(TEST_URL + path))
+                .header(HttpHeader.CONTENT_TYPE.getValue(), ContentTypes.APPLICATION_FORM_URL_ENCODED.getMimeType())
+                .POST(ofByteArray(queryFormat.formatted(userId, password).getBytes()))
+                .build();
+
+        // when
+        HttpResponse<byte[]> response = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
+
+        // then
+        assertThat(Integer.parseInt(HttpStatus.BAD_REQUEST.getResponseCode())).isEqualTo(response.statusCode());
+    }
+
+    @Test
+    @DisplayName("Password Parameter 없이 회원가입을 진행하면, 400 Error를 반환한다.")
+    void registerUserWithoutPasswordTest() throws Exception {
+        // given
+        String path = "/user/create";
+        String userId = "javajigi";
+        String name = "테스트이름";
+        String queryFormat = "userId=%s&name=%s";
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(TEST_URL + path))
+                .header(HttpHeader.CONTENT_TYPE.getValue(), ContentTypes.APPLICATION_FORM_URL_ENCODED.getMimeType())
+                .POST(ofByteArray(queryFormat.formatted(userId, name).getBytes()))
                 .build();
 
         // when
