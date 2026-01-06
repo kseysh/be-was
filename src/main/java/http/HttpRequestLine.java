@@ -3,10 +3,16 @@ package http;
 import java.util.Map;
 
 import enums.HttpMethod;
+import java.util.StringJoiner;
 
 public class HttpRequestLine {
 
-    private static final String REQUEST_LINE_SPACE = " ";
+    private static final String CRLF = "\r\n";
+    private static final String QUERY_STRING_PREFIX = "?";
+    private static final String PARAMETER_SEPARATOR = "&";
+    private static final String KEY_VALUE_SEPARATOR = "=";
+    private static final String REQUEST_LINE_FORMAT = "%s %s %s" + CRLF;
+    private static final String REQUEST_LINE_FORMAT_WITH_QUERIES = "%s %s" + QUERY_STRING_PREFIX + "%s %s" + CRLF;
 
     private final HttpMethod method;
     private String path;
@@ -41,6 +47,16 @@ public class HttpRequestLine {
     }
 
     public String toString() {
-        return this.method.name() + REQUEST_LINE_SPACE + this.path + REQUEST_LINE_SPACE + this.version;
+        StringJoiner queryJoiner = new StringJoiner(PARAMETER_SEPARATOR);
+
+        for (Map.Entry<String, String> entry : queries.entrySet()) {
+            queryJoiner.add(entry.getKey() + KEY_VALUE_SEPARATOR + entry.getValue());
+        }
+
+        if (queryJoiner.length() > 0) {
+            return REQUEST_LINE_FORMAT_WITH_QUERIES.formatted(method, path, queryJoiner.toString(), version);
+        } else {
+            return REQUEST_LINE_FORMAT.formatted(method.name(), path, version);
+        }
     }
 }

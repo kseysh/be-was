@@ -2,11 +2,13 @@ package http;
 
 import enums.HttpHeader;
 import java.util.Map;
+import java.util.StringJoiner;
 
 public class HttpHeaders {
 
-    private static final String HEADER_KEY_DELIMITER = ":";
-    private static final String HEADER_VALUE_DELIMITER = ",";
+    private static final String CRLF = "\r\n";
+    private static final String REQUEST_HEADER_FORMAT = "%s: %s" + CRLF;
+    private static final String VALUE_DELIMITER = ",";
 
     private final Map<String, String[]> headers;
 
@@ -28,14 +30,15 @@ public class HttpHeaders {
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for (Map.Entry<String, String[]> entry : headers.entrySet()) {
-            sb.append(entry.getKey()).append(HEADER_KEY_DELIMITER);
+        for (Map.Entry<String, String[]> header : headers.entrySet()) {
+            String[] values = header.getValue();
+            StringJoiner sj = new StringJoiner(VALUE_DELIMITER);
 
-            String[] values = entry.getValue();
-            for (int i = 0; i < values.length - 1; i++) {
-                sb.append(values[i]).append(HEADER_VALUE_DELIMITER);
+            for (String value : values) {
+                sj.add(value);
             }
-            sb.append(values[values.length - 1]).append('\n');
+
+            sb.append(REQUEST_HEADER_FORMAT.formatted(header.getKey(), sj.toString()));
         }
         return sb.toString();
     }

@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import enums.ContentTypes;
 import enums.HttpHeader;
+import enums.HttpStatus;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -53,8 +54,8 @@ class IntegrationTest {
         HttpResponse<byte[]> response = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
 
         // then
-        assertThat(response.statusCode()).isEqualTo(200);
-        assertThat(response.body()).isEqualTo(getStaticResource(path));
+        assertThat(response.statusCode()).isEqualTo(Integer.parseInt(HttpStatus.OK.getResponseCode()));
+        assertThat(response.body()).containsExactly(getStaticResource(path));
         assertEquals(
                 response.headers().map().get(HttpHeader.CONTENT_TYPE.getValue()).get(0),
                 ContentTypes.TEXT_HTML.getMimeType()
@@ -75,8 +76,8 @@ class IntegrationTest {
         HttpResponse<byte[]> response = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
 
         // then
-        assertThat(response.statusCode()).isEqualTo(200);
-        assertThat(response.body()).isEqualTo(getStaticResource(path));
+        assertThat(response.statusCode()).isEqualTo(Integer.parseInt(HttpStatus.OK.getResponseCode()));
+        assertThat(response.body()).containsExactly(getStaticResource(path));
         assertEquals(
                 response.headers().map().get(HttpHeader.CONTENT_TYPE.getValue()).get(0),
                 ContentTypes.TEXT_CSS.getMimeType()
@@ -98,7 +99,7 @@ class IntegrationTest {
 
         // then
         assertThat(response.statusCode()).isEqualTo(200);
-        assertThat(response.body()).isEqualTo(getStaticResource(path + "/index.html"));
+        assertThat(response.body()).containsExactly(getStaticResource(path + "/index.html"));
         assertEquals(
                 response.headers().map().get(HttpHeader.CONTENT_TYPE.getValue()).get(0),
                 ContentTypes.TEXT_HTML.getMimeType()
@@ -124,7 +125,7 @@ class IntegrationTest {
         HttpResponse<byte[]> response = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
 
         // then
-        assertThat(response.statusCode()).isEqualTo(302);
+        assertThat(response.statusCode()).isEqualTo(Integer.parseInt(HttpStatus.FOUND.getResponseCode()));
     }
 
     @Test
@@ -145,7 +146,7 @@ class IntegrationTest {
         HttpResponse<byte[]> response = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
 
         // then
-        assertThat(response.statusCode()).isEqualTo(302);
+        assertThat(response.statusCode()).isEqualTo(Integer.parseInt(HttpStatus.FOUND.getResponseCode()));
     }
 
     private byte[] getStaticResource(String path) throws IOException {

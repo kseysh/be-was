@@ -1,5 +1,6 @@
 package webserver;
 
+import http.RequestParser;
 import http.ResponseWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,8 +27,9 @@ public class RequestHandler implements Runnable {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-            HttpRequest request = new HttpRequest(in);
-            logger.debug("New Request : {}", request);
+            RequestParser parser = new RequestParser(in);
+            HttpRequest request = new HttpRequest(parser.getRequestLine(), parser.getHeaders(), parser.getBody());
+            logger.debug("New Request : {}", request.writeHttpRequest());
             HttpResponse response = new HttpResponse();
             DispatcherServlet dispatcherServlet = DispatcherServlet.getInstance();
             dispatcherServlet.doDispatch(request, response);

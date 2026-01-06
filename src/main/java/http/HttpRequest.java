@@ -1,21 +1,20 @@
 package http;
 
 import enums.HttpMethod;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Map;
 
 public class HttpRequest {
+
+    private static final String CRLF = "\r\n";
 
     private final HttpRequestLine requestLine;
     private final HttpHeaders headers;
     private final HttpRequestBody body;
 
-    public HttpRequest(InputStream in) throws IOException {
-        RequestParser parser = new RequestParser(in);
-        requestLine = parser.getRequestLine();
-        headers = parser.getHeaders();
-        body = parser.getBody();
+    public HttpRequest(HttpRequestLine requestLine, HttpHeaders headers, HttpRequestBody body) {
+        this.requestLine = requestLine;
+        this.headers = headers;
+        this.body = body;
     }
 
     public String getPath() {
@@ -42,11 +41,11 @@ public class HttpRequest {
         requestLine.setPath(path);
     }
 
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(requestLine.toString());
-        sb.append(headers.toString());
-        sb.append(body.toString());
-        return sb.toString();
+    public String writeHttpRequest() {
+        return requestLine.toString()
+                + headers.toString()
+                + CRLF
+                + body.toString()
+                + CRLF + CRLF;
     }
 }
