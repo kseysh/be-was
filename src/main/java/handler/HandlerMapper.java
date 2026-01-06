@@ -13,7 +13,7 @@ public class HandlerMapper {
 
     private static void initMapping() {
         handlers = Map.of(
-                "/create", CreateUserHandler.getInstance(),
+                "/user/create", CreateUserHandler.getInstance(),
                 "/registration", RegisterHandler.getInstance(),
                 "/", HomeHandler.getInstance()
         );

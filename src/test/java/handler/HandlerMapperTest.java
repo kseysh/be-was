@@ -13,7 +13,7 @@ class HandlerMapperTest {
     void getHandlerMappingTest() {
         assertAll(
                 () -> assertSame(HomeHandler.getInstance(), HandlerMapper.getHandler("/")),
-                () -> assertSame(CreateUserHandler.getInstance(), HandlerMapper.getHandler("/create")),
+                () -> assertSame(CreateUserHandler.getInstance(), HandlerMapper.getHandler("/user/create")),
                 () -> assertSame(RegisterHandler.getInstance(), HandlerMapper.getHandler("/registration"))
         );
     }
