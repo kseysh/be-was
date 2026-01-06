@@ -13,6 +13,7 @@ public enum ContentTypes {
     APPLICATION_JAVASCRIPT("application/javascript", "js"),
     APPLICATION_JSON("application/json", "json"),
     APPLICATION_XML("application/xml", "xml"),
+    APPLICATION_FORM_URL_ENCODED("application/x-www-form-urlencoded", "txt"),
     APPLICATION_OCTET_STREAM("application/octet-stream", "bin");
 
     private final String mimeType;
@@ -24,9 +25,19 @@ public enum ContentTypes {
         this.extension = extension;
     }
 
-    public static ContentTypes from(String extension) {
+    public static ContentTypes fromExtension(String extension) {
         for (ContentTypes contentType : ContentTypes.values()) {
             if (contentType.extension.equals(extension)) {
+                return contentType;
+            }
+        }
+
+        return APPLICATION_OCTET_STREAM;
+    }
+
+    public static ContentTypes fromMimeType(String mimeType) {
+        for (ContentTypes contentType : ContentTypes.values()) {
+            if (contentType.mimeType.equals(mimeType)) {
                 return contentType;
             }
         }
