@@ -7,7 +7,8 @@ import enums.HttpMethod;
 import enums.HttpStatus;
 import exception.BadRequestException;
 import exception.HttpException;
-import exception.NotFoundException;
+import exception.MethodNotAllowedException;
+import exception.UnsupportedMediaTypeException;
 import http.converter.Form;
 import http.converter.FormHttpMessageConverter;
 import http.converter.HttpMessageConverter;
@@ -35,7 +36,7 @@ public class CreateUserHandler implements Handler {
         if (request.getMethod() == HttpMethod.POST) {
             post(request, response);
         } else {
-            throw new NotFoundException("Not Supported Method");
+            throw new MethodNotAllowedException("Not Supported Method");
         }
     }
 
@@ -43,7 +44,7 @@ public class CreateUserHandler implements Handler {
         HttpMessageConverter<Form<String, String>> converter = new FormHttpMessageConverter();
         if(!converter.canRead(Form.class, request.getContentType())){
             logger.warn("Not Supported Method");
-            throw new BadRequestException("Not Supported ContentType");
+            throw new UnsupportedMediaTypeException("Not Supported ContentType");
         }
         Form<String, String> form = converter.read(request);
 
