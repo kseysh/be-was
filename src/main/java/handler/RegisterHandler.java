@@ -27,7 +27,6 @@ public class RegisterHandler implements Handler {
     }
 
     private void get(HttpRequest request, HttpResponse response) throws HttpException {
-        request.setPath("/registration/index.html");
-        StaticResourceHandler.getInstance().handle(request, response);
+        response.respondWithStaticFile(request.getVersion(), "/registration/index.html");
     }
 }

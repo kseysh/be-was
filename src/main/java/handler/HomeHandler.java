@@ -28,10 +28,9 @@ public class HomeHandler implements Handler {
 
     private void get(HttpRequest request, HttpResponse response) throws HttpException {
         if (request.getPath().equals("/")) {
-            request.setPath("/index.html");
+            response.respondWithStaticFile(request.getVersion(), "/index.html");
+        } else {
+            response.respondWithStaticFile(request.getVersion(), request.getPath());
         }
-        StaticResourceHandler.getInstance().handle(request, response);
     }
-
-
 }
