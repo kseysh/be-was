@@ -6,7 +6,7 @@ import model.User;
 
 public class SessionManager {
 
-    private static final ConcurrentMapCache<String, User> cache = new ConcurrentMapCache<>();
+    private static final Cache<String, User> cache = new ConcurrentMapCache<>();
     private static final SessionManager INSTANCE = new SessionManager();
 
     private SessionManager() {}
