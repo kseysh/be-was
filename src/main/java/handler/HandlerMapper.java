@@ -4,26 +4,23 @@ import java.util.Map;
 
 public class HandlerMapper {
 
-    private static Map<String, Handler> handlers;
-    private static boolean isInit = false;
+    private static final Map<String, Handler> handlers;
     private static final String DEFAULT_PATH = "/";
 
-    private HandlerMapper() {
-    }
-
-    private static void initMapping() {
+    static {
         handlers = Map.of(
-                "/user/create", CreateUserHandler.getInstance(),
+                "/login", LoginHandler.getInstance(),
+                "/create", CreateUserHandler.getInstance(),
                 "/registration", RegisterHandler.getInstance(),
                 "/", HomeHandler.getInstance()
         );
     }
 
+    private HandlerMapper() {
+    }
+
+
     public static Handler getHandler(String path) {
-        if (!isInit) {
-            initMapping();
-            isInit = true;
-        }
 
         while (handlers.get(path) == null) {
             int lastSlashIndex = path.lastIndexOf('/');
