@@ -7,14 +7,13 @@ import enums.HttpMethod;
 import enums.HttpStatus;
 import exception.BadRequestException;
 import exception.HttpException;
-import exception.NotFoundException;
+import exception.MethodNotAllowedException;
+import exception.UnsupportedMediaTypeException;
 import http.converter.Form;
 import http.converter.FormHttpMessageConverter;
 import http.converter.HttpMessageConverter;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import java.util.HashMap;
-import java.util.Map;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +34,7 @@ public class CreateUserHandler implements Handler {
         if (request.getMethod() == HttpMethod.POST) {
             post(request, response);
         } else {
-            throw new NotFoundException("Not Supported Method");
+            throw new MethodNotAllowedException("Not Supported Method");
         }
     }
 
@@ -43,7 +42,7 @@ public class CreateUserHandler implements Handler {
         HttpMessageConverter<Form<String, String>> converter = new FormHttpMessageConverter();
         if(!converter.canRead(Form.class, request.getContentType())){
             logger.warn("Not Supported Method");
-            throw new BadRequestException("Not Supported ContentType");
+            throw new UnsupportedMediaTypeException("Not Supported ContentType");
         }
         Form<String, String> form = converter.read(request);
 
@@ -58,12 +57,10 @@ public class CreateUserHandler implements Handler {
         Database.addUser(user);
         logger.info("User added: {}", user);
 
-        response.setVersion(request.getVersion());
-        response.setStatusCode(HttpStatus.FOUND);
-        Map<String, String> headers = new HashMap<>();
-        headers.put(HttpHeader.LOCATION.getValue(), "/index.html");
-        headers.put(HttpHeader.CONTENT_TYPE.getValue(), ContentTypes.TEXT_HTML.getMimeType());
-        response.setHeaders(headers);
+        response.setVersion(request.getVersion())
+                .setStatusCode(HttpStatus.FOUND)
+                .setHeader(HttpHeader.LOCATION.getValue(), "/index.html")
+                .setHeader(HttpHeader.CONTENT_TYPE.getValue(), ContentTypes.TEXT_HTML.getMimeType());
     }
 
     private static void validateParameters(String userId, String password, String name)

@@ -10,7 +10,11 @@ public enum HttpStatus {
 
     // 4XX Response
     BAD_REQUEST("400", "Bad Request"),
+    UNAUTHORIZED("401", "Unauthorized"),
     NOT_FOUND("404", "Not Found"),
+    METHOD_NOT_ALLOWED("405", "Method Not Allowed"),
+    NOT_ACCEPTABLE("406", "Not Acceptable"),
+    UNSUPPORTED_MEDIA_TYPE("415", "Unsupported Media Type"),
 
     // 5XX Response
     INTERNAL_SERVER_ERROR("500", "Internal Server Error"),

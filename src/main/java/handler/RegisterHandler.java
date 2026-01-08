@@ -2,7 +2,7 @@ package handler;
 
 import enums.HttpMethod;
 import exception.HttpException;
-import exception.NotFoundException;
+import exception.MethodNotAllowedException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 
@@ -22,12 +22,11 @@ public class RegisterHandler implements Handler {
         if (request.getMethod() == HttpMethod.GET) {
             get(request, response);
         } else {
-            throw new NotFoundException("Not Supported Method");
+            throw new MethodNotAllowedException("Not Supported Method");
         }
     }
 
     private void get(HttpRequest request, HttpResponse response) throws HttpException {
-        request.setPath("/registration/index.html");
-        StaticResourceHandler.getInstance().handle(request, response);
+        response.respondWithStaticFile(request.getVersion(), "/registration/index.html");
     }
 }

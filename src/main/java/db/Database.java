@@ -1,5 +1,6 @@
 package db;
 
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import model.User;
 
@@ -15,6 +16,10 @@ public class Database {
 
     public static void addUser(User user) {
         users.put(user.getUserId(), user);
+    }
+
+    public static Optional<User> findUserByUserId(String userId) {
+        return Optional.ofNullable(users.get(userId));
     }
 
     public static Collection<User> findAll() {
