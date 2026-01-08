@@ -8,23 +8,20 @@ import static org.junit.jupiter.api.Assertions.fail;
 import enums.ContentTypes;
 import enums.HttpHeader;
 import enums.HttpStatus;
-import java.io.File;
-import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.file.Files;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import util.FileReader;
 import webserver.WebServer;
 
 class IntegrationTest {
 
     private static final Integer TEST_PORT = 9090;
     private static final String TEST_URL = "http://localhost:" + TEST_PORT;
-    private static final String RESOURCES_PATH = "./src/main/resources/static";
     private static final HttpClient client = HttpClient.newHttpClient();
 
     @BeforeAll
@@ -56,7 +53,7 @@ class IntegrationTest {
 
         // then
         assertThat(response.statusCode()).isEqualTo(Integer.parseInt(HttpStatus.OK.getResponseCode()));
-        assertThat(response.body()).containsExactly(getStaticResource(path));
+        assertThat(response.body()).containsExactly(FileReader.readFile(path));
         assertEquals(
                 response.headers().map().get(HttpHeader.CONTENT_TYPE.getValue()).get(0),
                 ContentTypes.TEXT_HTML.getMimeType()
@@ -78,7 +75,7 @@ class IntegrationTest {
 
         // then
         assertThat(response.statusCode()).isEqualTo(Integer.parseInt(HttpStatus.OK.getResponseCode()));
-        assertThat(response.body()).containsExactly(getStaticResource(path));
+        assertThat(response.body()).containsExactly(FileReader.readFile(path));
         assertEquals(
                 response.headers().map().get(HttpHeader.CONTENT_TYPE.getValue()).get(0),
                 ContentTypes.TEXT_CSS.getMimeType()
@@ -100,7 +97,7 @@ class IntegrationTest {
 
         // then
         assertThat(response.statusCode()).isEqualTo(200);
-        assertThat(response.body()).containsExactly(getStaticResource(path + "/index.html"));
+        assertThat(response.body()).containsExactly(FileReader.readFile(path + "/index.html"));
         assertEquals(
                 response.headers().map().get(HttpHeader.CONTENT_TYPE.getValue()).get(0),
                 ContentTypes.TEXT_HTML.getMimeType()
@@ -175,7 +172,7 @@ class IntegrationTest {
 
     @Test
     @DisplayName("Name Parameter 없이 회원가입을 진행하면, 400 Error를 반환한다.")
-    void registerUserWithoutNameest() throws Exception {
+    void registerUserWithoutNameTest() throws Exception {
         // given
         String path = "/user/create";
         String userId = "javajigi";
@@ -188,7 +185,7 @@ class IntegrationTest {
                 .build();
 
         // when
-        HttpResponse<byte[]> response = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
+        HttpResponse<Void> response = client.send(request, HttpResponse.BodyHandlers.discarding());
 
         // then
         assertThat(Integer.parseInt(HttpStatus.BAD_REQUEST.getResponseCode())).isEqualTo(response.statusCode());
@@ -209,16 +206,34 @@ class IntegrationTest {
                 .build();
 
         // when
-        HttpResponse<byte[]> response = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
+        HttpResponse<Void> response = client.send(request, HttpResponse.BodyHandlers.discarding());
 
         // then
         assertThat(Integer.parseInt(HttpStatus.BAD_REQUEST.getResponseCode())).isEqualTo(response.statusCode());
     }
 
-    private byte[] getStaticResource(String path) throws IOException {
-        File file = new File(RESOURCES_PATH + path);
-        return Files.readAllBytes(file.toPath());
-    }
+    @Test
+    @DisplayName("/login/index.html을 반환할 수 있다.")
+    void loginPageTest() throws Exception {
+        // given
+        String path = "/login/index.html";
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(TEST_URL + path))
+                .GET()
+                .build();
 
+        // when
+        HttpResponse<byte[]> response = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(Integer.parseInt(HttpStatus.OK.getResponseCode()));
+        assertThat(response.body()).containsExactly(FileReader.readFile(path));
+
+
+        assertEquals(
+                response.headers().map().get(HttpHeader.CONTENT_TYPE.getValue()).get(0),
+                ContentTypes.TEXT_HTML.getMimeType()
+        );
+    }
 }
 
