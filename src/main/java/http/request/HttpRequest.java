@@ -2,6 +2,7 @@ package http.request;
 
 import enums.ContentTypes;
 import enums.HttpMethod;
+import java.net.HttpCookie;
 import java.util.Map;
 
 public class HttpRequest {
@@ -11,11 +12,18 @@ public class HttpRequest {
     private final HttpRequestLine requestLine;
     private final HttpHeaders headers;
     private final HttpRequestBody body;
+    private final HttpCookies cookies;
 
-    public HttpRequest(HttpRequestLine requestLine, HttpHeaders headers, HttpRequestBody body) {
+    public HttpRequest(
+            HttpRequestLine requestLine,
+            HttpHeaders headers,
+            HttpRequestBody body,
+            HttpCookies cookies
+    ) {
         this.requestLine = requestLine;
         this.headers = headers;
         this.body = body;
+        this.cookies = cookies;
     }
 
     public String getPath() {
@@ -32,6 +40,10 @@ public class HttpRequest {
 
     public HttpMethod getMethod() {
         return requestLine.getMethod();
+    }
+
+    public String getCookieValue(String key){
+        return cookies.getCookie(key);
     }
 
     public Map<String, String> getQuery() {

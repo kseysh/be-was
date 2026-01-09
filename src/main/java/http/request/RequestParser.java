@@ -21,14 +21,23 @@ public class RequestParser {
     private static final String HEADER_KEY_DELIMITER = ":";
     private static final String HEADER_VALUE_DELIMITER = ",";
 
+    private static final String COOKIE_DELIMITER = ";";
+
     private final HttpRequestLine requestLine;
     private final HttpHeaders headers;
     private final HttpRequestBody body;
+    private final HttpCookies cookies;
 
     public RequestParser(InputStream in) throws IOException {
         this.requestLine = parseRequestLine(in);
         this.headers = parseHeaders(in);
         this.body = parseRequestBody(in, headers.getContentLength());
+        String[] cookieValues = headers.getHeaders().get("Cookie");
+        if(cookieValues != null && cookieValues.length > 0){
+            this.cookies = parseCookies(cookieValues[0]);
+        }else{
+            this.cookies = HttpCookies.emptyCookies();
+        }
     }
 
     public HttpRequestLine getRequestLine() {
@@ -41,6 +50,10 @@ public class RequestParser {
 
     public HttpRequestBody getBody() {
         return body;
+    }
+
+    public HttpCookies getCookies() {
+        return cookies;
     }
 
     private HttpRequestLine parseRequestLine(InputStream in) throws IOException {
@@ -112,5 +125,24 @@ public class RequestParser {
             queryMap.put(decodedKey, decodedValue);
         }
         return queryMap;
+    }
+
+    private HttpCookies parseCookies(String line) {
+        Map<String, String> cookies = new HashMap<>();
+
+        String[] cookiePairs = line.strip().split(COOKIE_DELIMITER);
+
+        for (String cookiePair : cookiePairs) {
+            String[] pair = cookiePair.split(KEY_VALUE_SEPARATOR, 2);
+            String key = pair[0].trim();
+            if (pair.length == 2) {
+                String value = pair[1].trim();
+                cookies.put(key, value);
+            }else{
+                cookies.put(key, "");
+            }
+        }
+
+        return new HttpCookies(cookies);
     }
 }

@@ -11,7 +11,6 @@ import java.io.OutputStream;
 import java.net.Socket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import servlet.DispatcherServlet;
 
 public class RequestHandler implements Runnable {
 
@@ -28,11 +27,17 @@ public class RequestHandler implements Runnable {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             RequestParser parser = new RequestParser(in);
-            HttpRequest request = new HttpRequest(parser.getRequestLine(), parser.getHeaders(), parser.getBody());
+            HttpRequest request = new HttpRequest(
+                    parser.getRequestLine(),
+                    parser.getHeaders(),
+                    parser.getBody(),
+                    parser.getCookies()
+            );
             logger.debug("New Request : {}", request.writeHttpRequest());
+
             HttpResponse response = new HttpResponse();
-            DispatcherServlet dispatcherServlet = DispatcherServlet.getInstance();
-            dispatcherServlet.doDispatch(request, response);
+            DispatcherServlet.getInstance().doDispatch(request, response);
+
             ResponseWriter.writeTo(out, response);
         } catch (IOException e) {
             logger.error(e.getMessage());
