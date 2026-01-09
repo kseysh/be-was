@@ -3,6 +3,7 @@ package fixture;
 import enums.ContentTypes;
 import enums.HttpHeader;
 import enums.HttpMethod;
+import http.request.HttpCookies;
 import http.request.HttpHeaders;
 import http.request.HttpRequest;
 import http.request.HttpRequestBody;
@@ -35,10 +36,15 @@ public class HttpRequestFixture {
     );
     public static final HttpHeaders DEFAULT_HTTP_HEADERS = new HttpHeaders(DEFAULT_HEADERS);
 
+    // Cookie
+    public static final Map<String, String> DEFAULT_COOKIES = Map.of("sid", "value");
+    public static final HttpCookies DEFAULT_HTTP_COOKIES = new HttpCookies(DEFAULT_COOKIES);
+
     // http request
     public static final HttpRequest DEFAULT_HTTP_REQUEST = new HttpRequest(
             DEFAULT_REQUEST_LINE,
             DEFAULT_HTTP_HEADERS,
-            DEFAULT_HTTP_REQUEST_BODY
+            DEFAULT_HTTP_REQUEST_BODY,
+            DEFAULT_HTTP_COOKIES
     );
 }

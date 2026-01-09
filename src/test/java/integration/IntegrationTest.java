@@ -108,7 +108,7 @@ class IntegrationTest {
     @DisplayName("POST로 회원가입을 진행할 수 있다.")
     void registerUserTest() throws Exception {
         // given
-        String path = "/user/create";
+        String path = "/create";
         String userId = "javajigi";
         String password = "testPassword";
         String name = "테스트이름";
@@ -131,7 +131,7 @@ class IntegrationTest {
     @DisplayName("Email이 존재하지 않아도 회원가입을 진행할 수 있다.")
     void registerUserWithoutEmailTest() throws Exception {
         // given
-        String path = "/user/create";
+        String path = "/create";
         String userId = "javajigi";
         String password = "testPassword";
         String name = "테스트이름";
@@ -153,7 +153,7 @@ class IntegrationTest {
     @DisplayName("UserId Parameter 없이 회원가입을 진행하면, 400 Error를 반환한다.")
     void registerUserWithoutUserIdTest() throws Exception {
         // given
-        String path = "/user/create";
+        String path = "/create";
         String password = "testPassword";
         String name = "테스트이름";
         String queryFormat = "password=%s&name=%s";
@@ -174,7 +174,7 @@ class IntegrationTest {
     @DisplayName("Name Parameter 없이 회원가입을 진행하면, 400 Error를 반환한다.")
     void registerUserWithoutNameTest() throws Exception {
         // given
-        String path = "/user/create";
+        String path = "/create";
         String userId = "javajigi";
         String password = "testPassword";
         String queryFormat = "userId=%s&password=%s";
@@ -195,7 +195,7 @@ class IntegrationTest {
     @DisplayName("Password Parameter 없이 회원가입을 진행하면, 400 Error를 반환한다.")
     void registerUserWithoutPasswordTest() throws Exception {
         // given
-        String path = "/user/create";
+        String path = "/create";
         String userId = "javajigi";
         String name = "테스트이름";
         String queryFormat = "userId=%s&name=%s";

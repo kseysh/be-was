@@ -61,7 +61,7 @@ class RequestParserTest {
 
         Map<String, String> queries = Map.of(encodedQueryKey, encodedQueryValue);
         HttpRequestLine requestLine = new HttpRequestLine(DEFAULT_HTTP_METHOD, DEFAULT_PATH, DEFAULT_VERSION, queries);
-        HttpRequest request = new HttpRequest(requestLine, DEFAULT_HTTP_HEADERS, DEFAULT_HTTP_REQUEST_BODY);
+        HttpRequest request = new HttpRequest(requestLine, DEFAULT_HTTP_HEADERS, DEFAULT_HTTP_REQUEST_BODY, DEFAULT_HTTP_COOKIES);
 
         InputStream in = new ByteArrayInputStream(request.writeHttpRequest().getBytes());
 
