@@ -22,6 +22,7 @@ public class SessionManager {
     }
 
     public Optional<User> getAttribute(String sessionId){
+        if(sessionId == null) return Optional.empty();
         return Optional.ofNullable(cache.get(sessionId));
     }
 

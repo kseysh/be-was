@@ -29,7 +29,7 @@ class HomeHandlerTest {
                 DEFAULT_VERSION,
                 DEFAULT_QUERIES
         );
-        HttpRequest request = new HttpRequest(requestLine, DEFAULT_HTTP_HEADERS, DEFAULT_HTTP_REQUEST_BODY);
+        HttpRequest request = new HttpRequest(requestLine, DEFAULT_HTTP_HEADERS, DEFAULT_HTTP_REQUEST_BODY, DEFAULT_HTTP_COOKIES);
 
         // when
         HttpResponse response = new HttpResponse();
