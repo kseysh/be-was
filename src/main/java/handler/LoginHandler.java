@@ -17,7 +17,6 @@ import http.request.HttpRequest;
 import http.response.HttpResponse;
 import java.util.Optional;
 import model.User;
-import util.FileReader;
 
 public class LoginHandler implements Handler {
 
@@ -57,11 +56,11 @@ public class LoginHandler implements Handler {
 
         String sessionId = SessionManager.getInstance().setAttribute(user);
 
-        response.setStatusCode(HttpStatus.OK)
+        response.setStatusCode(HttpStatus.FOUND)
+                .setHeader(HttpHeader.LOCATION.getValue(), "/")
                 .setVersion(request.getVersion())
                 .setCookie(sessionId, "/")
-                .setHeader(HttpHeader.CONTENT_TYPE.getValue(), ContentTypes.TEXT_HTML.getMimeType())
-                .setBody(FileReader.readFile("/index.html"));
+                .setHeader(HttpHeader.CONTENT_TYPE.getValue(), ContentTypes.TEXT_HTML.getMimeType());
     }
 
     private User login(String userId, String password) throws HttpException {

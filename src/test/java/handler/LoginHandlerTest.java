@@ -1,5 +1,6 @@
 package handler;
 
+import static fixture.HttpRequestFixture.DEFAULT_HTTP_COOKIES;
 import static fixture.HttpRequestFixture.DEFAULT_HTTP_HEADERS;
 import static fixture.HttpRequestFixture.DEFAULT_HTTP_REQUEST_BODY;
 import static fixture.HttpRequestFixture.DEFAULT_QUERIES;
@@ -42,7 +43,7 @@ class LoginHandlerTest {
                 DEFAULT_VERSION,
                 DEFAULT_QUERIES
         );
-        HttpRequest request = new HttpRequest(requestLine, DEFAULT_HTTP_HEADERS, DEFAULT_HTTP_REQUEST_BODY);
+        HttpRequest request = new HttpRequest(requestLine, DEFAULT_HTTP_HEADERS, DEFAULT_HTTP_REQUEST_BODY, DEFAULT_HTTP_COOKIES);
 
         // when
         HttpResponse response = new HttpResponse();
@@ -85,7 +86,8 @@ class LoginHandlerTest {
         HttpRequest request = new HttpRequest(
                 requestLine,
                 httpHeaders,
-                new HttpRequestBody(urlEncodedString.getBytes(StandardCharsets.UTF_8))
+                new HttpRequestBody(urlEncodedString.getBytes(StandardCharsets.UTF_8)),
+                DEFAULT_HTTP_COOKIES
         );
 
         // when & then
@@ -97,7 +99,7 @@ class LoginHandlerTest {
     void shouldReturnSetCookieHeaderWhenPostRequest(){
         // given
         String requestPath = "/login";
-        String expectedPath = "/index.html";
+        String expectedPath = "/";
         HttpRequestLine requestLine = new HttpRequestLine(
                 HttpMethod.POST,
                 requestPath,
@@ -123,7 +125,8 @@ class LoginHandlerTest {
         HttpRequest request = new HttpRequest(
                 requestLine,
                 httpHeaders,
-                new HttpRequestBody(urlEncodedString.getBytes(StandardCharsets.UTF_8))
+                new HttpRequestBody(urlEncodedString.getBytes(StandardCharsets.UTF_8)),
+                DEFAULT_HTTP_COOKIES
         );
 
         // when
@@ -132,15 +135,14 @@ class LoginHandlerTest {
 
         // then
 
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody()).containsExactly(FileReader.readFile(expectedPath));
+        assertEquals(HttpStatus.FOUND, response.getStatusCode());
 
         Map<String, String> responseHeaders = response.getHeaders();
         assertEquals(
                 responseHeaders.get(HttpHeader.CONTENT_TYPE.getValue()),
                 ContentTypes.TEXT_HTML.getMimeType()
         );
-        String sessionId = responseHeaders.get(HttpHeader.SET_COOKIE.getValue());
-        assertNotNull(sessionId);
+        assertEquals(expectedPath, response.getHeaders().get(HttpHeader.LOCATION.getValue()));
+        assertNotNull(responseHeaders.get(HttpHeader.SET_COOKIE.getValue()));
     }
 }
