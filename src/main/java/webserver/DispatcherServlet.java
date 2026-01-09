@@ -1,4 +1,4 @@
-package servlet;
+package webserver;
 
 import exception.HttpException;
 import exception.ExceptionResolver;
