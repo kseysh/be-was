@@ -10,8 +10,10 @@ public class HandlerMapper {
     static {
         handlers = Map.of(
                 "/login", LoginHandler.getInstance(),
+                "/logout", LogoutHandler.getInstance(),
                 "/create", CreateUserHandler.getInstance(),
                 "/registration", RegisterHandler.getInstance(),
+                "/mypage", MyPageHandler.getInstance(),
                 "/", HomeHandler.getInstance()
         );
     }
