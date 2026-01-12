@@ -2,6 +2,7 @@ package db;
 
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import model.Article;
 import model.User;
 
 import java.util.Collection;
@@ -10,12 +11,18 @@ import java.util.Map;
 public class Database {
 
     private static final Map<String, User> users = new ConcurrentHashMap<>();
+    private static final Map<String, Article> articles = new ConcurrentHashMap<>();
+
 
     private Database() {
     }
 
     public static void addUser(User user) {
         users.put(user.getUserId(), user);
+    }
+
+    public static void addArticle(Article article) {
+        articles.put(article.articleId(), article);
     }
 
     public static Optional<User> findUserByUserId(String userId) {
