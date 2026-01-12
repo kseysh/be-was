@@ -36,7 +36,7 @@ public class HomeHandler implements Handler {
     }
 
     private void get(HttpRequest request, HttpResponse response) throws HttpException {
-        if (request.getPath().equals("/") || request.getPath().equals("/index.html")) {
+        if (request.getPath().equals("/") || request.getPath().equals("/index.html") || request.getPath().equals("/main")) {
             String sid = request.getCookieValue("sid");
             Optional<User> user = SessionManager.getInstance().getAttribute(sid);
             if (user.isPresent()) {
