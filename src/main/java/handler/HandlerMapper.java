@@ -14,6 +14,7 @@ public class HandlerMapper {
                 "/create", CreateUserHandler.getInstance(),
                 "/registration", RegisterHandler.getInstance(),
                 "/mypage", MyPageHandler.getInstance(),
+                "/article", ArticleHandler.getInstance(),
                 "/", HomeHandler.getInstance()
         );
     }
