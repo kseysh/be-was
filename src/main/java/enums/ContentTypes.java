@@ -14,6 +14,7 @@ public enum ContentTypes {
     APPLICATION_JSON("application/json", "json"),
     APPLICATION_XML("application/xml", "xml"),
     APPLICATION_FORM_URL_ENCODED("application/x-www-form-urlencoded", "txt"),
+    MULTIPART_FORM_DATA("multipart/form-data", "bin"),
     APPLICATION_OCTET_STREAM("application/octet-stream", "bin");
 
     private final String mimeType;
@@ -37,7 +38,7 @@ public enum ContentTypes {
 
     public static ContentTypes fromMimeType(String mimeType) {
         for (ContentTypes contentType : ContentTypes.values()) {
-            if (contentType.mimeType.equals(mimeType)) {
+            if (contentType.mimeType.equalsIgnoreCase(mimeType)) {
                 return contentType;
             }
         }

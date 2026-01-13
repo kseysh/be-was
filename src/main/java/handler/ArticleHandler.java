@@ -5,17 +5,20 @@ import db.SessionManager;
 import enums.HttpMethod;
 import exception.HttpException;
 import exception.MethodNotAllowedException;
-import http.converter.Form;
 import http.converter.HttpMessageConverter;
 import http.converter.HttpMessageConverterMapper;
+import http.converter.ImageForm;
+import http.converter.MultipartData;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import model.Article;
+import model.Image;
 import model.User;
 import webserver.view.StaticResourceView;
 import webserver.view.TemplateView;
@@ -47,13 +50,17 @@ public class ArticleHandler implements Handler {
         String sid = request.getCookieValue("sid");
         Optional<User> user = SessionManager.getInstance().getAttribute(sid);
         if (user.isPresent()) {
-            HttpMessageConverter<Form> converter = HttpMessageConverterMapper.findHttpMessageConverter(Form.class, request.getContentType());
-            Form<String, String> form = converter.read(request);
+            HttpMessageConverter<MultipartData> converter =
+                    HttpMessageConverterMapper.findHttpMessageConverter(MultipartData.class, request.getContentType());
+            MultipartData multipartData = converter.read(request);
 
-            String title = form.get("title");
-            String content = form.get("content");
+            String title = multipartData.getTexts("title");
+            String content = multipartData.getTexts("content");
+            ImageForm imageForm = multipartData.getFileBytes("image");
 
-            Article article = new Article(UUID.randomUUID().toString(), title, content, user.get().getUserId());
+            Image image = Image.from(imageForm);
+            Database.addImage(image);
+            Article article = new Article(UUID.randomUUID().toString(), title, content, user.get().getUserId(), image.imageId());
             Database.addArticle(article);
 
             Map<String, Object> model = new HashMap<>();
@@ -61,6 +68,7 @@ public class ArticleHandler implements Handler {
             model.put("name", user.get().getName());
             model.put("title", title);
             model.put("content", content);
+            model.put("image", "data:" + imageForm.contentType().getMimeType() + ";base64," + Base64.getEncoder().encodeToString(imageForm.bytes()));
 
             View view = new TemplateView("/main/index.html");
             view.render(model, request, response);
