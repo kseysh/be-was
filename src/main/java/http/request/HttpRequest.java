@@ -2,7 +2,6 @@ package http.request;
 
 import enums.ContentTypes;
 import enums.HttpMethod;
-import java.net.HttpCookie;
 import java.util.Map;
 
 public class HttpRequest {
@@ -52,6 +51,10 @@ public class HttpRequest {
 
     public ContentTypes getContentType() {
         return headers.getContentType();
+    }
+
+    public String getMultipartBoundary(){
+        return headers.getMultipartBoundary();
     }
 
     public void setPath(String path) {
