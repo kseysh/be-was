@@ -50,7 +50,7 @@ public class ArticleHandler extends AbstractHandler {
             model.put("name", user.get().getName());
             model.put("title", title);
             model.put("content", content);
-            model.put("image", "data:" + imageForm.contentType().getMimeType() + ";base64," + Base64.getEncoder().encodeToString(imageForm.bytes()));
+            model.put("image", image.toImageString());
 
             View view = new TemplateView("/main/index.html");
             view.render(model, request, response);

@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class FileReader {
 
-    private static final String RESOURCES_PATH = "./src/main/resources/static";
+    public static final String RESOURCES_PATH = "./src/main/resources/static";
 
     private FileReader() {
     }
