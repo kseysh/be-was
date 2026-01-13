@@ -3,23 +3,37 @@ package model;
 public class User {
 
     private final String userId;
-    private final String password;
-    private final String name;
+    private String password;
+    private String name;
     private final String email;
+    private final String imageId;
 
-    public User(String userId, String password, String name, String email) {
+    public User(String userId, String password, String name, String email, String imageId) {
         this.userId = userId;
         this.password = password;
         this.name = name;
         this.email = email;
+        this.imageId = imageId;
     }
 
     public String getUserId() {
         return userId;
     }
 
+    public void changeUserName(String name){
+        this.name = name;
+    }
+
+    public void changePassword(String password){
+        this.password = password;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public String getProfileImageId() {
+        return imageId;
     }
 
     public boolean matchesPassword(String password) {

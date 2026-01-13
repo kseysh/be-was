@@ -22,6 +22,14 @@ public class Database {
         images.put(image.imageId(), image);
     }
 
+    public static void updateImageById(String imageId, Image updatedImage) {
+        images.put(imageId, updatedImage);
+    }
+
+    public static Image findImageById(String imageId) {
+        return images.get(imageId);
+    }
+
     public static void addUser(User user) {
         users.put(user.getUserId(), user);
     }
@@ -36,5 +44,9 @@ public class Database {
 
     public static Collection<User> findAll() {
         return users.values();
+    }
+
+    public static void updateUser(String userId, User user) {
+        users.put(userId, user);
     }
 }

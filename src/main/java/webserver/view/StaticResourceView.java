@@ -14,6 +14,6 @@ public class StaticResourceView implements View {
 
     @Override
     public void render(Map<String, Object> model, HttpRequest request, HttpResponse response) {
-        response.respondWithStaticFile(request.getVersion(), filePath);
+        response.respondWithStaticFile(filePath);
     }
 }

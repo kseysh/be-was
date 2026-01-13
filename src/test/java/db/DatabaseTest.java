@@ -25,7 +25,7 @@ class DatabaseTest {
             executorService.submit(() -> {
                 try {
                     String randomId = UUID.randomUUID().toString();
-                    Database.addUser(new User(randomId, "testPassword", "testName", "testEmail"));
+                    Database.addUser(new User(randomId, "testPassword", "testName", "testEmail", "testImageId"));
                 } finally {
                     latch.countDown();
                 }

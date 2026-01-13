@@ -46,7 +46,7 @@ class LoginHandlerTest {
         HttpRequest request = new HttpRequest(requestLine, DEFAULT_HTTP_HEADERS, DEFAULT_HTTP_REQUEST_BODY, DEFAULT_HTTP_COOKIES);
 
         // when
-        HttpResponse response = new HttpResponse();
+        HttpResponse response = new HttpResponse(request.getVersion());
         Handler handler = new LoginHandler();
         handler.handle(request, response);
 
@@ -93,7 +93,7 @@ class LoginHandlerTest {
 
         // when & then
         Handler handler = new LoginHandler();
-        assertThrows(Exception.class, () -> handler.handle(request, new HttpResponse()));
+        assertThrows(Exception.class, () -> handler.handle(request, new HttpResponse(request.getVersion())));
     }
 
     @Test
@@ -111,7 +111,7 @@ class LoginHandlerTest {
 
         String userId = "testUserId";
         String password = "testPassword";
-        User user = new User(userId, password, "name", "email");
+        User user = new User(userId, password, "name", "email", "imageId");
         Database.addUser(user);
 
         String urlEncodedFormat = "userId=%s&password=%s";
@@ -132,7 +132,7 @@ class LoginHandlerTest {
         );
 
         // when
-        HttpResponse response = new HttpResponse();
+        HttpResponse response = new HttpResponse(request.getVersion());
         Handler handler = new LoginHandler();
         handler.handle(request, response);
 
