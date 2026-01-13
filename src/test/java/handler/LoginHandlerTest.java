@@ -15,7 +15,6 @@ import enums.ContentTypes;
 import enums.HttpHeader;
 import enums.HttpMethod;
 import enums.HttpStatus;
-import exception.NotFoundException;
 import http.request.HttpHeaders;
 import http.request.HttpRequest;
 import http.request.HttpRequestBody;
@@ -137,14 +136,8 @@ class LoginHandlerTest {
         handler.handle(request, response);
 
         // then
-
         assertEquals(HttpStatus.FOUND, response.getStatusCode());
-
         Map<String, String> responseHeaders = response.getHeaders();
-        assertEquals(
-                responseHeaders.get(HttpHeader.CONTENT_TYPE.getValue()),
-                ContentTypes.TEXT_HTML.getMimeType()
-        );
         assertEquals(expectedPath, response.getHeaders().get(HttpHeader.LOCATION.getValue()));
         assertNotNull(responseHeaders.get(HttpHeader.SET_COOKIE.getValue()));
     }

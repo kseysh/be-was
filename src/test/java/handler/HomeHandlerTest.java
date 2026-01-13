@@ -32,7 +32,7 @@ class HomeHandlerTest {
         HttpRequest request = new HttpRequest(requestLine, DEFAULT_HTTP_HEADERS, DEFAULT_HTTP_REQUEST_BODY, DEFAULT_HTTP_COOKIES);
 
         // when
-        HttpResponse response = new HttpResponse();
+        HttpResponse response = new HttpResponse(request.getVersion());
         Handler handler = new HomeHandler();
         handler.handle(request, response);
 
