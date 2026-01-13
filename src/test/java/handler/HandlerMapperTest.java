@@ -24,12 +24,12 @@ class HandlerMapperTest {
     @Test
     @DisplayName("매핑되지 않은 경로 요청 시 HomeHandler를 반환한다")
     void shouldReturnHomeHandlerWhenPathIsUnmapped() {
-        assertSame(HomeHandler.getInstance(), HandlerMapper.getHandler("/not/mapping/test/path"));
+        assertSame(HomeHandler.class, HandlerMapper.getHandler("/not/mapping/test/path").getClass());
     }
 
     @Test
     @DisplayName("파일 확장자가 포함된 경로(/create.html)는 CreateUserHandler와 매핑되지 않고 HomeHandler를 반환한다")
     void shouldNotMapToCreateUserHandlerWhenPathHasExtension() {
-        assertSame(HomeHandler.getInstance(), HandlerMapper.getHandler("/create.html"));
+        assertSame(HomeHandler.class, HandlerMapper.getHandler("/create.html").getClass());
     }
 }

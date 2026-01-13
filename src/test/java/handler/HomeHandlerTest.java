@@ -33,7 +33,8 @@ class HomeHandlerTest {
 
         // when
         HttpResponse response = new HttpResponse();
-        HomeHandler.getInstance().handle(request, response);
+        Handler handler = new HomeHandler();
+        handler.handle(request, response);
 
         // then
 

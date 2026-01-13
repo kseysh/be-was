@@ -35,7 +35,7 @@ public class RequestHandler implements Runnable {
             );
             logger.debug("New Request : {}", request.writeHttpRequest());
 
-            HttpResponse response = new HttpResponse();
+            HttpResponse response = new HttpResponse(request.getVersion());
             DispatcherServlet.getInstance().doDispatch(request, response);
 
             ResponseWriter.writeTo(out, response);

@@ -21,7 +21,6 @@ public class LogoutHandler extends AbstractHandler {
 
         response.setStatusCode(HttpStatus.FOUND)
                 .setHeader(HttpHeader.LOCATION.getValue(), "/")
-                .setVersion(request.getVersion())
                 .setCookie(sessionId, "/")
                 .setHeader(HttpHeader.CONTENT_TYPE.getValue(), ContentTypes.TEXT_HTML.getMimeType());
     }

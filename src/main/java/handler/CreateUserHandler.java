@@ -1,19 +1,17 @@
 package handler;
 
 import db.Database;
-import enums.ContentTypes;
 import enums.HttpHeader;
-import enums.HttpMethod;
 import enums.HttpStatus;
 import exception.BadRequestException;
 import exception.HttpException;
-import exception.MethodNotAllowedException;
 import exception.UnsupportedMediaTypeException;
 import http.converter.Form;
 import http.converter.FormHttpMessageConverter;
 import http.converter.HttpMessageConverter;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import model.Image;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,14 +39,14 @@ public class CreateUserHandler extends AbstractHandler {
 
         validateParameters(userId, password, name);
 
-        User user = new User(userId, password, name, email);
+        Image profileImage = Image.defaultImage();
+        User user = new User(userId, password, name, email, profileImage.imageId());
+        Database.addImage(profileImage);
         Database.addUser(user);
         logger.info("User added: {}", user);
 
-        response.setVersion(request.getVersion())
-                .setStatusCode(HttpStatus.FOUND)
-                .setHeader(HttpHeader.LOCATION.getValue(), "/index.html")
-                .setHeader(HttpHeader.CONTENT_TYPE.getValue(), ContentTypes.TEXT_HTML.getMimeType());
+        response.setStatusCode(HttpStatus.FOUND)
+                .setHeader(HttpHeader.LOCATION.getValue(), "/index.html");
     }
 
     private void validateParameters(String userId, String password, String name)

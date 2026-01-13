@@ -28,7 +28,6 @@ public class TemplateView implements View {
 
         response.setHeader(HttpHeader.CONTENT_TYPE.getValue(), ContentTypes.TEXT_HTML.getMimeType())
                 .setStatusCode(HttpStatus.OK)
-                .setVersion(request.getVersion())
                 .setBody(content.getBytes(StandardCharsets.UTF_8));
     }
 }

@@ -26,7 +26,6 @@ public class ExceptionResolver {
         }
 
         response.setStatusCode(e.getStatus())
-                .setVersion(request.getVersion())
                 .setBody(FileReader.readFile(errorPage))
                 .setHeader(HttpHeader.CONTENT_TYPE.getValue(), ContentTypes.TEXT_HTML.getMimeType());
     }
