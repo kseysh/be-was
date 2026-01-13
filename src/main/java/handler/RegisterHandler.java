@@ -1,32 +1,16 @@
 package handler;
 
-import enums.HttpMethod;
 import exception.HttpException;
-import exception.MethodNotAllowedException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 
-public class RegisterHandler implements Handler {
+public class RegisterHandler extends AbstractHandler {
 
-    private static final RegisterHandler INSTANCE = new RegisterHandler();
-
-    private RegisterHandler() {
-    }
-
-    public static RegisterHandler getInstance() {
-        return INSTANCE;
+    public RegisterHandler() {
     }
 
     @Override
-    public void handle(HttpRequest request, HttpResponse response) throws HttpException {
-        if (request.getMethod() == HttpMethod.GET) {
-            get(request, response);
-        } else {
-            throw new MethodNotAllowedException("Not Supported Method");
-        }
-    }
-
-    private void get(HttpRequest request, HttpResponse response) throws HttpException {
+    protected void get(HttpRequest request, HttpResponse response) throws HttpException {
         response.respondWithStaticFile(request.getVersion(), "/registration/index.html");
     }
 }

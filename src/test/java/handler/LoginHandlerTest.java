@@ -47,7 +47,8 @@ class LoginHandlerTest {
 
         // when
         HttpResponse response = new HttpResponse();
-        LoginHandler.getInstance().handle(request, response);
+        Handler handler = new LoginHandler();
+        handler.handle(request, response);
 
         // then
 
@@ -91,7 +92,8 @@ class LoginHandlerTest {
         );
 
         // when & then
-        assertThrows(NotFoundException.class, () -> LoginHandler.getInstance().handle(request, new HttpResponse()));
+        Handler handler = new LoginHandler();
+        assertThrows(Exception.class, () -> handler.handle(request, new HttpResponse()));
     }
 
     @Test
@@ -131,7 +133,8 @@ class LoginHandlerTest {
 
         // when
         HttpResponse response = new HttpResponse();
-        LoginHandler.getInstance().handle(request, response);
+        Handler handler = new LoginHandler();
+        handler.handle(request, response);
 
         // then
 

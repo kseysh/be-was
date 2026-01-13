@@ -2,9 +2,7 @@ package handler;
 
 import db.Database;
 import db.SessionManager;
-import enums.HttpMethod;
 import exception.HttpException;
-import exception.MethodNotAllowedException;
 import http.converter.HttpMessageConverter;
 import http.converter.HttpMessageConverterMapper;
 import http.converter.ImageForm;
@@ -24,29 +22,13 @@ import webserver.view.StaticResourceView;
 import webserver.view.TemplateView;
 import webserver.view.View;
 
-public class ArticleHandler implements Handler {
+public class ArticleHandler extends AbstractHandler {
 
-    private static final ArticleHandler INSTANCE = new ArticleHandler();
-
-    private ArticleHandler() {
-    }
-
-    public static ArticleHandler getInstance() {
-        return INSTANCE;
+    public ArticleHandler() {
     }
 
     @Override
-    public void handle(HttpRequest request, HttpResponse response) throws HttpException {
-        if (request.getMethod() == HttpMethod.GET) {
-            get(request, response);
-        } else if (request.getMethod() == HttpMethod.POST) {
-            post(request, response);
-        } else {
-            throw new MethodNotAllowedException("Not Supported Method");
-        }
-    }
-
-    private void post(HttpRequest request, HttpResponse response) {
+    protected void post(HttpRequest request, HttpResponse response) {
         String sid = request.getCookieValue("sid");
         Optional<User> user = SessionManager.getInstance().getAttribute(sid);
         if (user.isPresent()) {
@@ -78,7 +60,8 @@ public class ArticleHandler implements Handler {
         }
     }
 
-    private void get(HttpRequest request, HttpResponse response) throws HttpException {
+    @Override
+    protected void get(HttpRequest request, HttpResponse response) throws HttpException {
         String sid = request.getCookieValue("sid");
         Optional<User> user = SessionManager.getInstance().getAttribute(sid);
         if (user.isPresent()) {

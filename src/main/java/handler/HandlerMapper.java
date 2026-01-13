@@ -9,13 +9,13 @@ public class HandlerMapper {
 
     static {
         handlers = Map.of(
-                "/login", LoginHandler.getInstance(),
-                "/logout", LogoutHandler.getInstance(),
-                "/create", CreateUserHandler.getInstance(),
-                "/registration", RegisterHandler.getInstance(),
-                "/mypage", MyPageHandler.getInstance(),
-                "/article", ArticleHandler.getInstance(),
-                "/", HomeHandler.getInstance()
+                "/login", new LoginHandler(),
+                "/logout", new LogoutHandler(),
+                "/create", new CreateUserHandler(),
+                "/registration", new RegisterHandler(),
+                "/mypage", new MyPageHandler(),
+                "/article", new ArticleHandler(),
+                "/", new HomeHandler()
         );
     }
 

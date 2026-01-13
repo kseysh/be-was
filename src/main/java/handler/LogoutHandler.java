@@ -3,34 +3,18 @@ package handler;
 import db.SessionManager;
 import enums.ContentTypes;
 import enums.HttpHeader;
-import enums.HttpMethod;
 import enums.HttpStatus;
 import exception.HttpException;
-import exception.MethodNotAllowedException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 
-public class LogoutHandler implements Handler {
+public class LogoutHandler extends AbstractHandler {
 
-    private static final LogoutHandler INSTANCE = new LogoutHandler();
-
-    private LogoutHandler() {
-    }
-
-    public static LogoutHandler getInstance() {
-        return INSTANCE;
+    public LogoutHandler() {
     }
 
     @Override
-    public void handle(HttpRequest request, HttpResponse response) throws HttpException {
-        if (request.getMethod() == HttpMethod.POST) {
-            post(request, response);
-        } else {
-            throw new MethodNotAllowedException("Not Supported Method");
-        }
-    }
-
-    private void post(HttpRequest request, HttpResponse response) throws HttpException {
+    protected void post(HttpRequest request, HttpResponse response) throws HttpException {
         String sessionId = request.getCookieValue("sid");
 
         SessionManager.getInstance().removeAttribute(sessionId);

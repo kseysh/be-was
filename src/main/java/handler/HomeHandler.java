@@ -15,27 +15,13 @@ import webserver.view.StaticResourceView;
 import webserver.view.TemplateView;
 import webserver.view.View;
 
-public class HomeHandler implements Handler {
+public class HomeHandler extends AbstractHandler {
 
-    private static final HomeHandler INSTANCE = new HomeHandler();
-
-    private HomeHandler() {
-    }
-
-    public static HomeHandler getInstance() {
-        return INSTANCE;
+    public HomeHandler() {
     }
 
     @Override
-    public void handle(HttpRequest request, HttpResponse response) throws HttpException {
-        if (request.getMethod() == HttpMethod.GET) {
-            get(request, response);
-        } else {
-            throw new MethodNotAllowedException("Not Supported Method");
-        }
-    }
-
-    private void get(HttpRequest request, HttpResponse response) throws HttpException {
+    protected void get(HttpRequest request, HttpResponse response) throws HttpException {
         if (request.getPath().equals("/") || request.getPath().equals("/index.html") || request.getPath().equals("/main")) {
             String sid = request.getCookieValue("sid");
             Optional<User> user = SessionManager.getInstance().getAttribute(sid);

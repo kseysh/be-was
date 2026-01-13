@@ -15,36 +15,25 @@ import http.converter.HttpMessageConverter;
 import http.converter.HttpMessageConverterMapper;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
+import java.util.Collections;
 import java.util.Optional;
 import model.User;
+import webserver.view.StaticResourceView;
+import webserver.view.View;
 
-public class LoginHandler implements Handler {
+public class LoginHandler extends AbstractHandler {
 
-    private static final LoginHandler INSTANCE = new LoginHandler();
-
-    private LoginHandler() {
-    }
-
-    public static LoginHandler getInstance() {
-        return INSTANCE;
+    public LoginHandler() {
     }
 
     @Override
-    public void handle(HttpRequest request, HttpResponse response) throws HttpException {
-        if (request.getMethod() == HttpMethod.GET) {
-            get(request, response);
-        } else if (request.getMethod() == HttpMethod.POST) {
-            post(request, response);
-        } else {
-            throw new MethodNotAllowedException("Not Supported Method");
-        }
+    protected void get(HttpRequest request, HttpResponse response) throws HttpException {
+        View view = new StaticResourceView("/login/index.html");
+        view.render(Collections.emptyMap(), request, response);
     }
 
-    private void get(HttpRequest request, HttpResponse response) throws HttpException {
-        response.respondWithStaticFile(request.getVersion(), "/login/index.html");
-    }
-
-    private void post(HttpRequest request, HttpResponse response) throws HttpException {
+    @Override
+    protected void post(HttpRequest request, HttpResponse response) throws HttpException {
         HttpMessageConverter<Form> converter =
                 HttpMessageConverterMapper.findHttpMessageConverter(Form.class, request.getContentType());
         Form<String, String> form = converter.read(request);

@@ -12,12 +12,12 @@ class HandlerMapperTest {
     @DisplayName("모든 경로에 대해 적절한 핸들러를 반환하는지 검증한다.")
     void getHandlerMappingTest() {
         assertAll(
-                () -> assertSame(HomeHandler.getInstance(), HandlerMapper.getHandler("/")),
-                () -> assertSame(LoginHandler.getInstance(), HandlerMapper.getHandler("/login")),
-                () -> assertSame(LogoutHandler.getInstance(), HandlerMapper.getHandler("/logout")),
-                () -> assertSame(MyPageHandler.getInstance(), HandlerMapper.getHandler("/mypage")),
-                () -> assertSame(CreateUserHandler.getInstance(), HandlerMapper.getHandler("/create")),
-                () -> assertSame(RegisterHandler.getInstance(), HandlerMapper.getHandler("/registration"))
+                () -> assertSame(HomeHandler.class, HandlerMapper.getHandler("/").getClass()),
+                () -> assertSame(LoginHandler.class, HandlerMapper.getHandler("/login").getClass()),
+                () -> assertSame(LogoutHandler.class, HandlerMapper.getHandler("/logout").getClass()),
+                () -> assertSame(MyPageHandler.class, HandlerMapper.getHandler("/mypage").getClass()),
+                () -> assertSame(CreateUserHandler.class, HandlerMapper.getHandler("/create").getClass()),
+                () -> assertSame(RegisterHandler.class, HandlerMapper.getHandler("/registration").getClass())
         );
     }
 

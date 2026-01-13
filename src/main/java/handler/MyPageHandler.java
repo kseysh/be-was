@@ -9,19 +9,12 @@ import java.util.Collections;
 import webserver.view.StaticResourceView;
 import webserver.view.View;
 
-public class MyPageHandler implements Handler{
+public class MyPageHandler extends AbstractHandler{
 
-    private static final MyPageHandler INSTANCE = new MyPageHandler();
-
-    private MyPageHandler() {}
-
-    public static MyPageHandler getInstance() {
-        return INSTANCE;
-    }
-
+    public MyPageHandler() {}
 
     @Override
-    public void handle(HttpRequest request, HttpResponse response) throws HttpException {
+    protected void get(HttpRequest request, HttpResponse response) throws HttpException {
         String sessionId = request.getCookieValue("sid");
         SessionManager.getInstance().getAttribute(sessionId).orElseThrow(() -> new UnauthorizedException("unauthorized"));
         View view = new StaticResourceView("/mypage/index.html");
