@@ -10,7 +10,8 @@ public class HttpMessageConverterMapper {
 
     static {
         converters = List.of(
-                new FormHttpMessageConverter()
+                new FormHttpMessageConverter(),
+                new MultipartHttpMessageConverter()
         );
     }
 
