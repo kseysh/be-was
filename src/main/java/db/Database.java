@@ -3,6 +3,7 @@ package db;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import model.Article;
+import model.Image;
 import model.User;
 
 import java.util.Collection;
@@ -12,9 +13,13 @@ public class Database {
 
     private static final Map<String, User> users = new ConcurrentHashMap<>();
     private static final Map<String, Article> articles = new ConcurrentHashMap<>();
-
+    private static final Map<String, Image> images = new ConcurrentHashMap<>();
 
     private Database() {
+    }
+
+    public static void addImage(Image image) {
+        images.put(image.imageId(), image);
     }
 
     public static void addUser(User user) {
