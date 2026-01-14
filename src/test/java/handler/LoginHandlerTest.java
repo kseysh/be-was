@@ -10,7 +10,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import db.Database;
+import db.DatabaseConfig;
+import db.UserDatabase;
 import enums.ContentTypes;
 import enums.HttpHeader;
 import enums.HttpMethod;
@@ -29,6 +30,8 @@ import org.junit.jupiter.api.Test;
 import util.FileReader;
 
 class LoginHandlerTest {
+
+    private final UserDatabase userDatabase = DatabaseConfig.userDatabase;
 
     @Test
     @DisplayName("/login에 GET요청을 보내면 /login/index.html로 변환하여 반환한다.")
@@ -111,7 +114,7 @@ class LoginHandlerTest {
         String userId = "testUserId";
         String password = "testPassword";
         User user = new User(userId, password, "name", "email", "imageId");
-        Database.addUser(user);
+        userDatabase.save(user);
 
         String urlEncodedFormat = "userId=%s&password=%s";
         String urlEncodedString = urlEncodedFormat.formatted(userId, password);

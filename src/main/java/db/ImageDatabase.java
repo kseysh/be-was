@@ -1,6 +1,7 @@
 package db;
 
 import enums.ContentTypes;
+import exception.NotFoundException;
 import model.Image;
 
 import javax.sql.DataSource;
@@ -24,6 +25,11 @@ public class ImageDatabase {
 
     public Optional<Image> findById(String articleId) {
         return jdbcTemplate.queryForObject(SELECT_SQL, new ImageRowMapper(), articleId);
+    }
+
+    public Image findByIdOrThrow(String articleId) {
+        return jdbcTemplate.queryForObject(SELECT_SQL, new ImageRowMapper(), articleId)
+                .orElseThrow(() -> new NotFoundException(articleId + " image not found"));
     }
 
     static class ImageRowMapper implements RowMapper<Image>{

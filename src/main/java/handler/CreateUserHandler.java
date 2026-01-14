@@ -1,6 +1,6 @@
 package handler;
 
-import db.Database;
+import db.*;
 import enums.HttpHeader;
 import enums.HttpStatus;
 import exception.BadRequestException;
@@ -19,6 +19,9 @@ import org.slf4j.LoggerFactory;
 public class CreateUserHandler extends AbstractHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(CreateUserHandler.class);
+
+    private final UserDatabase userDatabase = DatabaseConfig.userDatabase;
+    private final ImageDatabase imageDatabase = DatabaseConfig.imageDatabase;
 
     public CreateUserHandler() {
     }
@@ -41,8 +44,10 @@ public class CreateUserHandler extends AbstractHandler {
 
         Image profileImage = Image.defaultImage();
         User user = new User(userId, password, name, email, profileImage.imageId());
-        Database.addImage(profileImage);
-        Database.addUser(user);
+
+        imageDatabase.save(profileImage);
+        userDatabase.save(user);
+
         logger.info("User added: {}", user);
 
         response.setStatusCode(HttpStatus.FOUND)

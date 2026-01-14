@@ -1,7 +1,6 @@
 package handler;
 
-import db.Database;
-import db.SessionManager;
+import db.*;
 import enums.HttpHeader;
 import enums.HttpStatus;
 import exception.BadRequestException;
@@ -13,17 +12,18 @@ import http.converter.ImageForm;
 import http.converter.MultipartData;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import model.Image;
 import model.User;
-import webserver.view.StaticResourceView;
 import webserver.view.TemplateView;
 import webserver.view.View;
 
 public class MyPageHandler extends AbstractHandler{
+
+    private final UserDatabase userDatabase = DatabaseConfig.userDatabase;
+    private final ImageDatabase imageDatabase = DatabaseConfig.imageDatabase;
 
     public MyPageHandler() {}
 
@@ -32,7 +32,7 @@ public class MyPageHandler extends AbstractHandler{
         String sessionId = request.getCookieValue("sid");
         User user = SessionManager.getInstance().getAttribute(sessionId).orElseThrow(() -> new UnauthorizedException("unauthorized"));
 
-        Image userProfileImage = Database.findImageById(user.getProfileImageId());
+        Image userProfileImage = imageDatabase.findByIdOrThrow(user.getProfileImageId());
 
         Map<String,Object> model = new HashMap<>();
         model.put("name",user.getName());
@@ -61,8 +61,9 @@ public class MyPageHandler extends AbstractHandler{
         String profileImageId = user.getProfileImageId();
         user.changeUserName(nickname);
         user.changePassword(password);
-        Database.updateImageById(profileImageId, Image.of(profileImageId, imageForm));
-        Database.updateUser(user.getUserId(), user);
+
+        imageDatabase.save(Image.of(profileImageId, imageForm));
+        userDatabase.save(user);
 
         response.setStatusCode(HttpStatus.FOUND)
                 .setHeader(HttpHeader.LOCATION.getValue(), "/")

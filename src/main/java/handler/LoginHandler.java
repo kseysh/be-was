@@ -1,13 +1,11 @@
 package handler;
 
-import db.Database;
+import db.DatabaseConfig;
 import db.SessionManager;
-import enums.ContentTypes;
+import db.UserDatabase;
 import enums.HttpHeader;
-import enums.HttpMethod;
 import enums.HttpStatus;
 import exception.HttpException;
-import exception.MethodNotAllowedException;
 import exception.NotFoundException;
 import exception.UnauthorizedException;
 import http.converter.Form;
@@ -22,6 +20,8 @@ import webserver.view.StaticResourceView;
 import webserver.view.View;
 
 public class LoginHandler extends AbstractHandler {
+
+    private final UserDatabase userDatabase = DatabaseConfig.userDatabase;
 
     public LoginHandler() {
     }
@@ -51,7 +51,7 @@ public class LoginHandler extends AbstractHandler {
     }
 
     private User login(String userId, String password) throws HttpException {
-        Optional<User> optionalUser = Database.findUserByUserId(userId);
+        Optional<User> optionalUser = userDatabase.findById(userId);
 
         if (optionalUser.isEmpty()) {
             throw new NotFoundException("User Not Found");
