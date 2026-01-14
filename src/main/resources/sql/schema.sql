@@ -29,5 +29,5 @@ CREATE TABLE IF NOT EXISTS comment (
     comment_id    VARCHAR(255) PRIMARY KEY,
     content       CLOB NOT NULL,
     user_id       VARCHAR(50) NOT NULL,
-    article_id    VARCHAR(255) NOT NULL,
+    article_id    VARCHAR(255) NOT NULL
     );
