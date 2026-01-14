@@ -4,7 +4,8 @@ public record Article(
         String articleId,
         String content,
         String userId,
-        String imageId
+        String imageId,
+        Integer likeCount
 ) {
 
 }

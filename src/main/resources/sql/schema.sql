@@ -22,7 +22,8 @@ CREATE TABLE IF NOT EXISTS article (
     article_id    VARCHAR(255) PRIMARY KEY,
     content       CLOB,
     user_id       VARCHAR(50) NOT NULL,
-    image_id      VARCHAR(255) NOT NULL
+    image_id      VARCHAR(255) NOT NULL,
+    like_count    INTEGER DEFAULT 0
     );
 
 CREATE TABLE IF NOT EXISTS comment (

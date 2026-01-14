@@ -4,6 +4,7 @@ public enum HttpStatus {
 
     // 2XX Response
     OK("200", "OK"),
+    NO_CONTENT("204", "No Content"),
 
     // 3XX Response
     FOUND("302", "Found"),
