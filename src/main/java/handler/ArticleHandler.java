@@ -1,7 +1,6 @@
 package handler;
 
-import db.Database;
-import db.SessionManager;
+import db.*;
 import exception.HttpException;
 import http.converter.HttpMessageConverter;
 import http.converter.HttpMessageConverterMapper;
@@ -9,7 +8,6 @@ import http.converter.ImageForm;
 import http.converter.MultipartData;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import java.util.Base64;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +22,26 @@ import webserver.view.View;
 
 public class ArticleHandler extends AbstractHandler {
 
+    private final ArticleDatabase articleDatabase = DatabaseConfig.articleDatabase;
+    private final ImageDatabase imageDatabase = DatabaseConfig.imageDatabase;
+
     public ArticleHandler() {
+    }
+
+    @Override
+    protected void get(HttpRequest request, HttpResponse response) throws HttpException {
+        String sid = request.getCookieValue("sid");
+        Optional<User> user = SessionManager.getInstance().getAttribute(sid);
+        if (user.isPresent()) {
+            Map<String, Object> model = new HashMap<>();
+            model.put("name", user.get().getName());
+
+            View view = new TemplateView("/article/index.html");
+            view.render(model, request, response);
+        } else {
+            View view = new StaticResourceView("/login/index.html");
+            view.render(Collections.emptyMap(), request, response);
+        }
     }
 
     @Override
@@ -36,37 +53,22 @@ public class ArticleHandler extends AbstractHandler {
                     HttpMessageConverterMapper.findHttpMessageConverter(MultipartData.class, request.getContentType());
             MultipartData multipartData = converter.read(request);
 
-            String title = multipartData.getTexts("title");
             String content = multipartData.getTexts("content");
             ImageForm imageForm = multipartData.getFileBytes("image");
 
             Image image = Image.from(imageForm);
-            Database.addImage(image);
-            Article article = new Article(UUID.randomUUID().toString(), title, content, user.get().getUserId(), image.imageId());
-            Database.addArticle(article);
+            imageDatabase.save(image);
+            Article article = new Article(UUID.randomUUID().toString(), content, user.get().getUserId(), image.imageId());
+            articleDatabase.save(article);
 
             Map<String, Object> model = new HashMap<>();
-
             model.put("name", user.get().getName());
-            model.put("title", title);
             model.put("content", content);
             model.put("image", image.toImageString());
 
+            // TODO: 새로운 게시물의 화면으로 이동할 수 있어야 한다.
             View view = new TemplateView("/main/index.html");
             view.render(model, request, response);
-        } else {
-            View view = new StaticResourceView("/login/index.html");
-            view.render(Collections.emptyMap(), request, response);
-        }
-    }
-
-    @Override
-    protected void get(HttpRequest request, HttpResponse response) throws HttpException {
-        String sid = request.getCookieValue("sid");
-        Optional<User> user = SessionManager.getInstance().getAttribute(sid);
-        if (user.isPresent()) {
-            View view = new StaticResourceView("/article/index.html");
-            view.render(Collections.emptyMap(), request, response);
         } else {
             View view = new StaticResourceView("/login/index.html");
             view.render(Collections.emptyMap(), request, response);

@@ -12,6 +12,7 @@
     <a href="/main"><img src="../img/signiture.svg"/></a>
     <ul class="header__menu">
       <li class="header__menu__item">
+        안녕하세요, {{name}}님! &nbsp&nbsp
         <a class="btn btn_contained btn_size_s" href="/article">글쓰기</a>
       </li>
       <li class="header__menu__item">
@@ -23,35 +24,84 @@
   </header>
   <div class="page">
     <h2 class="page-title">게시글 작성</h2>
-    <form class="form" action="/article" method="post" enctype="multipart/form-data">
-      <div class="textfield textfield_size_s">
-        <p class="title_textfield">제목</p>
-        <input
-            class="input_textfield"
-            placeholder="글 제목을 입력해주세요"
-            name="title"
-        />
-      </div>
+    <form id="article-form" class="form" enctype="multipart/form-data">
 
       <div class="textfield textfield_size_m">
         <p class="title_textfield">내용</p>
         <textarea
-            class="input_textfield"
-            placeholder="글의 내용을 입력하세요"
-            name="content"
+                class="input_textfield"
+                placeholder="글의 내용을 입력하세요"
+                name="content"
         ></textarea>
       </div>
+
       <input type="file" id="file-upload" name="image" accept="image/png, image/jpeg">
+
       <button
-          id="registration-btn"
-          class="btn btn_contained btn_size_m"
-          style="margin-top: 24px"
-          type="submit"
+              id="registration-btn"
+              class="btn btn_contained btn_size_m"
+              style="margin-top: 24px"
+              type="submit"
       >
         작성 완료
       </button>
     </form>
   </div>
 </div>
+
+<script>
+  const articleForm = document.getElementById('article-form');
+  const fileInput = document.getElementById('file-upload');
+
+  articleForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    if (fileInput.files.length === 0) {
+      alert("파일을 반드시 첨부해야 게시글을 작성할 수 있습니다.");
+      return;
+    }
+
+    const formData = new FormData(articleForm);
+
+    try {
+      const response = await fetch('/article', {
+        method: 'POST',
+        body: formData
+      });
+
+      // 1. 성공 응답 (200~299) 처리
+      if (response.ok) {
+        if (response.redirected) {
+          window.location.href = response.url;
+          return;
+        }
+
+        // [핵심 수정] 서버가 HTML을 보낸다면 response.json()을 호출하면 안 됩니다.
+        // 응답 헤더를 확인하여 JSON일 때만 파싱하고, 아니면 바로 메인으로 이동합니다.
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+          const data = await response.json();
+          window.location.href = data.redirectUrl || '/main';
+        } else {
+          // HTML 응답이거나 별도 데이터가 없다면 성공으로 간주하고 이동
+          window.location.href = '/main';
+        }
+      }
+      // 2. 실패 응답 처리 (400대 또는 500대 에러인 경우만)
+      else if (response.status >= 400 && response.status < 600) {
+        alert("작성에 실패했습니다. 다시 시도해주세요. (에러 코드: " + response.status + ")");
+      }
+
+    } catch (error) {
+      // 3. 네트워크 장애나 코드 실행 중 예외 발생 시 (JSON 파싱 에러 등)
+      console.error("Error details:", error);
+      // 단순 파싱 에러로 인해 사용자에게 불필요한 알림이 가지 않도록 방어 로직 추가 가능
+    }
+  });
+
+  document.getElementById('logout-btn').addEventListener('click', () => {
+    window.location.href = '/logout';
+  });
+</script>
 </body>
 </html>

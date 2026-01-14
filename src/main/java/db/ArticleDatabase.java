@@ -10,15 +10,30 @@ import java.util.Optional;
 public class ArticleDatabase {
 
     private final CustomJdbcTemplate jdbcTemplate;
-    private static final String INSERT_SQL = "insert into article (articleId, title, content, userId, imageId) values (?, ?, ?, ?, ?)";
-    private static final String SELECT_SQL = "select from article where articleId = ?";
+    private static final String INSERT_SQL = "insert into ARTICLE (ARTICLE_ID, CONTENT, USER_ID, IMAGE_ID) values (?, ?, ?, ?)";
+    private static final String UPDATE_SQL = "update ARTICLE set CONTENT = ?, USER_ID = ?, IMAGE_ID = ? where ARTICLE_ID = ?";
+    private static final String SELECT_SQL = "select * from ARTICLE where ARTICLE_ID = ?";
 
     public ArticleDatabase(DataSource dataSource) {
         jdbcTemplate = new CustomJdbcTemplate(dataSource);
     }
 
     public void save(Article article) {
-        jdbcTemplate.update(INSERT_SQL, article);
+        jdbcTemplate.update(INSERT_SQL,
+                article.articleId(),
+                article.content(),
+                article.userId(),
+                article.imageId()
+        );
+    }
+
+    public void update(Article article) {
+        jdbcTemplate.update(UPDATE_SQL,
+                article.content(),
+                article.userId(),
+                article.imageId(),
+                article.articleId()
+        );
     }
 
     public Optional<Article> findById(String articleId) {
@@ -29,11 +44,10 @@ public class ArticleDatabase {
         @Override
         public Article mapRow(ResultSet rs) throws SQLException {
             return new Article(
-                    rs.getString("articleId"),
-                    rs.getString("title"),
-                    rs.getString("content"),
-                    rs.getString("userId"),
-                    rs.getString("imageId")
+                    rs.getString("ARTICLE_ID"),
+                    rs.getString("CONTENT"),
+                    rs.getString("USER_ID"),
+                    rs.getString("IMAGE_ID")
             );
         }
     }

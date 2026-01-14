@@ -20,9 +20,9 @@ VALUES ('ti', 'tp', '테스트유저', 'ti@example.com', 'user-img-id-1'),
        ('user5', 'pwd5', '손흥민', 'heungmin@example.com', 'user-img-id-5');
 
 -- 3. Article 데이터 생성
-INSERT INTO article (article_id, title, content, user_id, image_id)
-VALUES ('art-001', '첫 번째 게시글', '안녕하세요, 테스트유저입니다.', 'ti', 'article-img-id-1'),
-       ('art-002', '반갑습니다', '철수의 게시글입니다.', 'user2', 'article-img-id-2'),
-       ('art-003', '오늘의 날씨', '영희가 쓴 글입니다.', 'user3', 'article-img-id-3'),
-       ('art-004', '축구 소식', '지성이 쓴 글입니다.', 'user4', 'article-img-id-4'),
-       ('art-005', '프리미어리그', '흥민이 쓴 글입니다.', 'user5', 'article-img-id-5');
+INSERT INTO article (article_id, content, user_id, image_id)
+VALUES ('art-001',  '안녕하세요, 테스트유저입니다.', 'ti', 'article-img-id-1'),
+       ('art-002',  '철수의 게시글입니다.', 'user2', 'article-img-id-2'),
+       ('art-003',  '영희가 쓴 글입니다.', 'user3', 'article-img-id-3'),
+       ('art-004',  '지성이 쓴 글입니다.', 'user4', 'article-img-id-4'),
+       ('art-005',  '흥민이 쓴 글입니다.', 'user5', 'article-img-id-5');

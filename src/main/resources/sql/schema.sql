@@ -22,7 +22,6 @@ CREATE TABLE IF NOT EXISTS users (
 -- 3. Article 테이블
 CREATE TABLE IF NOT EXISTS article (
     article_id    VARCHAR(255) PRIMARY KEY, -- 게시글 고유 ID
-    title         VARCHAR(255) NOT NULL,    -- 제목
     content       CLOB,                     -- 대용량 텍스트를 위한 Character Large Object
     user_id       VARCHAR(50) NOT NULL,     -- 작성자 ID
     image_id      VARCHAR(255)             -- 게시글 첨부 이미지 ID
