@@ -13,6 +13,7 @@ public class UserDatabase {
     private static final String INSERT_SQL = "insert into USERS (USER_ID, PASSWORD, NAME, EMAIL, IMAGE_ID) values (?, ?, ?, ?, ?)";
     private static final String UPDATE_SQL = "update USERS set PASSWORD = ?, NAME = ?, EMAIL = ?, IMAGE_ID = ? where USER_ID = ?";
     private static final String SELECT_SQL = "select * from USERS u where u.USER_ID = ?";
+    private static final String SELECT_SQL_BY_NAME = "select * from USERS where NAME = ?";
 
     public UserDatabase(DataSource dataSource) {
         jdbcTemplate = new CustomJdbcTemplate(dataSource);
@@ -42,6 +43,10 @@ public class UserDatabase {
 
     public Optional<User> findById(String userId) {
         return jdbcTemplate.queryForObject(SELECT_SQL, new UserRowMapper(), userId);
+    }
+
+    public Optional<User> findByName(String name) {
+        return jdbcTemplate.queryForObject(SELECT_SQL_BY_NAME, new UserRowMapper(), name);
     }
 
     static class UserRowMapper implements RowMapper<User>{
