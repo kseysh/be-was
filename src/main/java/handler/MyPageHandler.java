@@ -56,24 +56,26 @@ public class MyPageHandler extends AbstractHandler{
         String password = multipartData.getTexts("password");
         String passwordConfirm = multipartData.getTexts("passwordConfirm");
 
-        validateParameters(imageForm, nickname, password, passwordConfirm);
-
-        String profileImageId = user.getProfileImageId();
+        if(nickname == null) throw new BadRequestException("nickname required");
         user.changeUserName(nickname);
-        user.changePassword(password);
 
-        imageDatabase.save(Image.of(profileImageId, imageForm));
-        userDatabase.save(user);
+        if(imageForm != null){
+            String profileImageId = user.getProfileImageId();
+            imageDatabase.update(Image.of(profileImageId, imageForm));
+        }
+
+        if(password != null && !password.isEmpty()){
+            if (password.equals(passwordConfirm)) {
+                user.changePassword(password);
+            }else{
+                throw new BadRequestException("password not matched");
+            }
+        }
+
+        userDatabase.update(user);
 
         response.setStatusCode(HttpStatus.FOUND)
                 .setHeader(HttpHeader.LOCATION.getValue(), "/")
                 .setHeader(HttpHeader.CONTENT_LENGTH.getValue(), "0");
-    }
-
-    private void validateParameters(ImageForm imageForm, String nickname, String password, String passwordConfirm) {
-        if(imageForm == null) throw new BadRequestException("imageForm required");
-        if(nickname == null) throw new BadRequestException("nickname required");
-        if(password == null) throw new BadRequestException("password required");
-        if(!password.equals(passwordConfirm)) throw new BadRequestException("password not match");
     }
 }

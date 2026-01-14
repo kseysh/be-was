@@ -49,4 +49,8 @@ public enum ContentTypes {
     public String getMimeType() {
         return mimeType;
     }
+
+    public String getExtension() {
+        return extension;
+    }
 }

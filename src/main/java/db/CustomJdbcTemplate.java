@@ -1,10 +1,7 @@
 package db;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -49,6 +46,7 @@ public class CustomJdbcTemplate {
             throw new RuntimeException("DB Update Error: " + sql, e);
         }
     }
+
     private void setParameters(PreparedStatement pstmt, Object[] args) throws SQLException {
         for (int i = 0; i < args.length; i++) {
             pstmt.setObject(i + 1, args[i]);

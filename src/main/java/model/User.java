@@ -36,12 +36,21 @@ public class User {
         return imageId;
     }
 
+    public String getPassword(){
+        return password;
+    }
+
     public boolean matchesPassword(String password) {
         return this.password.equals(password);
+    }
+
+    public String getEmail() {
+        return this.email;
     }
 
     @Override
     public String toString() {
         return "User [userId=" + userId + ", password=" + password + ", name=" + name + ", email=" + email + "]";
     }
+
 }
