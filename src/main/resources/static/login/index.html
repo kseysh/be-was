@@ -1,58 +1,107 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="../reset.css" rel="stylesheet" />
-    <link href="../global.css" rel="stylesheet" />
-  </head>
-  <body>
-    <div class="container">
-      <header class="header">
-        <a href="/"><img src="../img/signiture.svg" /></a>
-        <ul class="header__menu">
-          <li class="header__menu__item">
-            <a class="btn btn_contained btn_size_s" href="/login">로그인</a>
-          </li>
-          <li class="header__menu__item">
-            <a class="btn btn_ghost btn_size_s" href="/registration">
-              회원 가입
-            </a>
-          </li>
-        </ul>
-      </header>
-      <div class="page">
-        <h2 class="page-title">로그인</h2>
-        <form class="form" action="/login" method="post">
-          <div class="textfield textfield_size_s">
-            <p class="title_textfield">아이디</p>
-            <input
-              class="input_textfield"
-              placeholder="아이디를 입력해주세요"
-              autocomplete="username"
-              name="userId"
-            />
-          </div>
-          <div class="textfield textfield_size_s">
-            <p class="title_textfield">비밀번호</p>
-            <input
-              class="input_textfield"
-              type="password"
-              placeholder="비밀번호를 입력해주세요"
-              autocomplete="current-password"
-              name="password"
-            />
-          </div>
-          <button
-            id="login-btn"
-            class="btn btn_contained btn_size_m"
-            style="margin-top: 24px"
-            type="submit"
-          >
-            로그인
-          </button>
-        </form>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="../reset.css" rel="stylesheet" />
+  <link href="../global.css" rel="stylesheet" />
+</head>
+<body>
+<div class="container">
+  <header class="header">
+    <a href="/"><img src="../img/signiture.svg" /></a>
+    <ul class="header__menu">
+      <li class="header__menu__item">
+        <a class="btn btn_contained btn_size_s" href="/login">로그인</a>
+      </li>
+      <li class="header__menu__item">
+        <a class="btn btn_ghost btn_size_s" href="/registration">
+          회원 가입
+        </a>
+      </li>
+    </ul>
+  </header>
+  <div class="page">
+    <h2 class="page-title">로그인</h2>
+    <form id="login-form" class="form">
+      <div class="textfield textfield_size_s">
+        <p class="title_textfield">아이디</p>
+        <input
+                class="input_textfield"
+                placeholder="아이디를 입력해주세요"
+                autocomplete="username"
+                name="userId"
+                required
+        />
       </div>
-    </div>
-  </body>
+      <div class="textfield textfield_size_s">
+        <p class="title_textfield">비밀번호</p>
+        <input
+                class="input_textfield"
+                type="password"
+                placeholder="비밀번호를 입력해주세요"
+                autocomplete="current-password"
+                name="password"
+                inputmode="verbatim"
+                required
+        />
+      </div>
+      <button
+              id="login-btn"
+              class="btn btn_contained btn_size_m"
+              style="margin-top: 24px"
+              type="submit"
+      >
+        로그인
+      </button>
+    </form>
+  </div>
+</div>
+
+<script>
+  const loginForm = document.getElementById('login-form');
+
+  loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    // urlencoded 방식으로 전송하기 위한 설정
+    const formData = new FormData(loginForm);
+    const params = new URLSearchParams(formData);
+
+    try {
+      const response = await fetch('/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: params
+      });
+
+      // 1. 로그인 성공 (서버에서 302 Redirect 응답 시)
+      if (response.redirected) {
+        window.location.href = response.url; // /main 으로 이동
+        return;
+      }
+
+      // 2. 서버 응답 상태 코드에 따른 처리
+      // (서버에서 아이디 없음은 404, 비밀번호 불일치는 401을 보낸다고 가정합니다)
+      if (response.status === 404) {
+        const goToRegistration = confirm("존재하지 않는 아이디입니다. 회원 가입 하시겠습니까?");
+        if (goToRegistration) {
+          window.location.href = "/registration";
+        }
+      } else if (response.status === 401) {
+        alert("비밀번호가 틀렸습니다");
+        // 현재 페이지 유지 (별도 이동 없음)
+      } else {
+        alert("로그인 처리 중 오류가 발생했습니다.");
+      }
+
+    } catch (error) {
+      console.error("Error:", error);
+      alert("서버 통신 오류가 발생했습니다.");
+    }
+  });
+</script>
+</body>
 </html>
