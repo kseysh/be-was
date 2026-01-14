@@ -15,6 +15,7 @@ public class HandlerMapper {
                 "/registration", new RegisterHandler(),
                 "/mypage", new MyPageHandler(),
                 "/article", new ArticleHandler(),
+                "/comment", new CommentHandler(),
                 "/", new HomeHandler()
         );
     }
