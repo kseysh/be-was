@@ -3,6 +3,8 @@ package handler;
 import db.*;
 import db.cache.SessionManager;
 import db.config.DatabaseConfig;
+import enums.HttpHeader;
+import enums.HttpStatus;
 import exception.HttpException;
 import http.converter.*;
 import http.request.HttpRequest;
@@ -18,7 +20,7 @@ import static model.Comment.newComment;
 
 public class CommentHandler extends AbstractHandler {
 
-    private final CommentDatabase commentDatabase = DatabaseConfig.commentDatabase;
+    private static final CommentDatabase commentDatabase = DatabaseConfig.commentDatabase;
 
     public CommentHandler() {
     }
@@ -30,7 +32,7 @@ public class CommentHandler extends AbstractHandler {
         if (user.isPresent()) {
             Map<String, Object> model = new HashMap<>();
             model.put("name", user.get().getName());
-
+            model.put("articleId", request.getQuery().get("articleId"));
             View view = new TemplateView("/comment/index.html");
             view.render(model, request, response);
         } else {
@@ -48,18 +50,14 @@ public class CommentHandler extends AbstractHandler {
                     HttpMessageConverterMapper.findHttpMessageConverter(Form.class, request.getContentType());
             Form<String, String> form = converter.read(request);
 
-            String comment = form.get("comment");
-            // TODO: articleId를 body가 아닌 다른 방식으로 받을 수 있어야 한다.
-            String articleId = form.get("articleId");
+            String comment = form.get("content");
+            Long articleId = Long.parseLong(form.get("articleId"));
             String userId = user.get().getUserId();
 
             commentDatabase.save(newComment(comment, userId, articleId));
 
-            Map<String, Object> model = new HashMap<>();
-            model.put("name", user.get().getName());
-            // TODO: 보고 있던 게시물의 화면으로 이동할 수 있어야 한다.
-            View view = new StaticResourceView("/main/index.html");
-            view.render(model, request, response);
+            response.setStatusCode(HttpStatus.FOUND)
+                    .setHeader(HttpHeader.LOCATION.getValue(), "/?articleId=" + articleId);
         } else {
             View view = new StaticResourceView("/login/index.html");
             view.render(Collections.emptyMap(), request, response);

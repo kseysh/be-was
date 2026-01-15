@@ -1,19 +1,19 @@
 package model;
 
 public class Comment {
-    private final String commentId;
+    private final Long commentId;
     private final String content;
     private final String userId;
-    private final String articleId;
+    private final Long articleId;
 
-    private Comment(String commentId, String content, String userId, String articleId){
+    public Comment(Long commentId, String content, String userId, Long articleId){
         this.commentId = commentId;
         this.content = content;
         this.userId = userId;
         this.articleId = articleId;
     }
 
-    public static Comment newComment(String content, String userId, String articleId){
+    public static Comment newComment(String content, String userId, Long articleId){
         return new Comment(null, content, userId, articleId);
     }
 
@@ -21,7 +21,7 @@ public class Comment {
         return userId;
     }
 
-    public String getCommentId() {
+    public Long getCommentId() {
         return commentId;
     }
 
@@ -29,7 +29,7 @@ public class Comment {
         return content;
     }
 
-    public String getArticleId() {
+    public Long getArticleId() {
         return articleId;
     }
 }
