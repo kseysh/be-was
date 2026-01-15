@@ -5,10 +5,10 @@ public class Article {
     private final String content;
     private final String userId;
     private final String imageId;
-    private final Integer likeCount;
+    private final Long likeCount;
 
 
-    private Article(Long articleId, String content, String userId, String imageId, Integer likeCount){
+    public Article(Long articleId, String content, String userId, String imageId, Long likeCount){
         this.articleId = articleId;
         this.content = content;
         this.userId = userId;
@@ -17,7 +17,7 @@ public class Article {
     }
 
     public static Article newArticle(String content, String userId, String imageId){
-        return new Article(null, content, userId, imageId, 0);
+        return new Article(null, content, userId, imageId, 0L);
     }
 
     public Long getArticleId() {
@@ -36,7 +36,7 @@ public class Article {
         return imageId;
     }
 
-    public Integer getLikeCount() {
+    public Long getLikeCount() {
         return likeCount;
     }
 }
