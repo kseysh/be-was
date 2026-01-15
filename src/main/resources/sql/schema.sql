@@ -23,12 +23,14 @@ CREATE TABLE IF NOT EXISTS article (
     content       CLOB,
     user_id       VARCHAR(50) NOT NULL,
     image_id      VARCHAR(255) NOT NULL,
-    like_count    INTEGER DEFAULT 0
+    like_count    INTEGER DEFAULT 0,
+    created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
 
 CREATE TABLE IF NOT EXISTS comment (
     comment_id    VARCHAR(255) PRIMARY KEY AUTO_INCREMENT,
     content       CLOB NOT NULL,
     user_id       VARCHAR(50) NOT NULL,
-    article_id    VARCHAR(255) NOT NULL
+    article_id    VARCHAR(255) NOT NULL,
+    created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
