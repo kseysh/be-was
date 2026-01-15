@@ -24,15 +24,15 @@ import webserver.view.View;
 
 public class MyPageHandler extends AbstractHandler{
 
-    private final UserDatabase userDatabase = DatabaseConfig.userDatabase;
-    private final ImageDatabase imageDatabase = DatabaseConfig.imageDatabase;
+    private static final UserDatabase userDatabase = DatabaseConfig.userDatabase;
+    private static final ImageDatabase imageDatabase = DatabaseConfig.imageDatabase;
 
     @Override
     protected void get(HttpRequest request, HttpResponse response) throws HttpException {
         String sessionId = request.getCookieValue("sid");
         User user = SessionManager.getInstance().getAttribute(sessionId).orElseThrow(() -> new UnauthorizedException("unauthorized"));
 
-        Image userProfileImage = imageDatabase.findByIdOrThrow(user.getProfileImageId());
+        Image userProfileImage = imageDatabase.findByIdOrElseThrow(user.getProfileImageId());
 
         Map<String,Object> model = new HashMap<>();
         model.put("name",user.getName());

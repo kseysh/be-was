@@ -9,7 +9,6 @@ import model.Image;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Optional;
 
 public class ImageDatabase {
 
@@ -30,11 +29,7 @@ public class ImageDatabase {
         jdbcTemplate.update(UPDATE_SQL, image.bytes(), image.fileName(), image.contentType().getExtension(), image.imageId());
     }
 
-    public Optional<Image> findById(String imageId) {
-        return jdbcTemplate.queryForObject(SELECT_SQL, new ImageRowMapper(), imageId);
-    }
-
-    public Image findByIdOrThrow(String imageId) {
+    public Image findByIdOrElseThrow(String imageId) {
         return jdbcTemplate.queryForObject(SELECT_SQL, new ImageRowMapper(), imageId)
                 .orElseThrow(() -> new NotFoundException(imageId + " image not found"));
     }
