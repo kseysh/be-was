@@ -1,4 +1,4 @@
-package db;
+package db.cache;
 
 public interface Cache<K, V> {
 

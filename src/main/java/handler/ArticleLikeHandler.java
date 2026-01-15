@@ -1,22 +1,11 @@
 package handler;
 
 import db.ArticleDatabase;
-import db.DatabaseConfig;
-import db.ImageDatabase;
-import db.SessionManager;
+import db.config.DatabaseConfig;
 import enums.HttpStatus;
-import exception.HttpException;
 import http.converter.*;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
-import model.Article;
-import model.Image;
-import model.User;
-import webserver.view.StaticResourceView;
-import webserver.view.TemplateView;
-import webserver.view.View;
-
-import java.util.*;
 
 public class ArticleLikeHandler extends AbstractHandler {
 

@@ -1,6 +1,7 @@
 package handler;
 
 import db.*;
+import db.config.DatabaseConfig;
 import enums.HttpHeader;
 import enums.HttpStatus;
 import exception.BadRequestException;

@@ -1,4 +1,4 @@
-package db;
+package db.config;
 
 import javax.sql.DataSource;
 import java.io.PrintWriter;
@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
 import java.util.logging.Logger;
 
-import static db.ConnectionConst.*;
+import static db.config.ConnectionConst.*;
 
 public class CustomDataSource implements DataSource {
     @Override

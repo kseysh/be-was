@@ -1,6 +1,8 @@
 package handler;
 
 import db.*;
+import db.cache.SessionManager;
+import db.config.DatabaseConfig;
 import exception.HttpException;
 import http.converter.HttpMessageConverter;
 import http.converter.HttpMessageConverterMapper;
@@ -24,9 +26,6 @@ public class ArticleHandler extends AbstractHandler {
 
     private final ArticleDatabase articleDatabase = DatabaseConfig.articleDatabase;
     private final ImageDatabase imageDatabase = DatabaseConfig.imageDatabase;
-
-    public ArticleHandler() {
-    }
 
     @Override
     protected void get(HttpRequest request, HttpResponse response) throws HttpException {

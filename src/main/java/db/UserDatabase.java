@@ -1,5 +1,7 @@
 package db;
 
+import db.config.CustomJdbcTemplate;
+import db.config.RowMapper;
 import model.User;
 
 import javax.sql.DataSource;
@@ -49,7 +51,7 @@ public class UserDatabase {
         return jdbcTemplate.queryForObject(SELECT_SQL_BY_NAME, new UserRowMapper(), name);
     }
 
-    static class UserRowMapper implements RowMapper<User>{
+    static class UserRowMapper implements RowMapper<User> {
         @Override
         public User mapRow(ResultSet rs) throws SQLException {
             return new User(

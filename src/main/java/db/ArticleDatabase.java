@@ -1,5 +1,7 @@
 package db;
 
+import db.config.CustomJdbcTemplate;
+import db.config.RowMapper;
 import model.Article;
 
 import javax.sql.DataSource;
@@ -48,7 +50,7 @@ public class ArticleDatabase {
         jdbcTemplate.update(UPDATE_LIKE_COUNT_SQL, articleId);
     }
 
-    static class ArticleRowMapper implements RowMapper<Article>{
+    static class ArticleRowMapper implements RowMapper<Article> {
         @Override
         public Article mapRow(ResultSet rs) throws SQLException {
             return newArticle(

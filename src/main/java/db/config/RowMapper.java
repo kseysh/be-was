@@ -1,4 +1,4 @@
-package db;
+package db.config;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

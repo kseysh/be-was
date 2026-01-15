@@ -1,4 +1,4 @@
-package db;
+package db.config;
 
 import javax.sql.DataSource;
 import java.sql.*;

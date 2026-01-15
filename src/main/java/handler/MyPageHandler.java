@@ -1,6 +1,8 @@
 package handler;
 
 import db.*;
+import db.cache.SessionManager;
+import db.config.DatabaseConfig;
 import enums.HttpHeader;
 import enums.HttpStatus;
 import exception.BadRequestException;
@@ -24,8 +26,6 @@ public class MyPageHandler extends AbstractHandler{
 
     private final UserDatabase userDatabase = DatabaseConfig.userDatabase;
     private final ImageDatabase imageDatabase = DatabaseConfig.imageDatabase;
-
-    public MyPageHandler() {}
 
     @Override
     protected void get(HttpRequest request, HttpResponse response) throws HttpException {

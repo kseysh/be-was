@@ -8,7 +8,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import db.DatabaseInitializer;
+import db.config.DatabaseInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

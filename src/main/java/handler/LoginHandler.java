@@ -1,7 +1,7 @@
 package handler;
 
-import db.DatabaseConfig;
-import db.SessionManager;
+import db.config.DatabaseConfig;
+import db.cache.SessionManager;
 import db.UserDatabase;
 import enums.HttpHeader;
 import enums.HttpStatus;
@@ -21,10 +21,7 @@ import webserver.view.View;
 
 public class LoginHandler extends AbstractHandler {
 
-    private final UserDatabase userDatabase = DatabaseConfig.userDatabase;
-
-    public LoginHandler() {
-    }
+    private static final UserDatabase userDatabase = DatabaseConfig.userDatabase;
 
     @Override
     protected void get(HttpRequest request, HttpResponse response) throws HttpException {

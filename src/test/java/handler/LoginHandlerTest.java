@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import db.DatabaseConfig;
+import db.config.DatabaseConfig;
 import db.UserDatabase;
 import enums.ContentTypes;
 import enums.HttpHeader;

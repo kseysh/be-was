@@ -1,5 +1,7 @@
 package db;
 
+import db.config.CustomJdbcTemplate;
+import db.config.RowMapper;
 import model.Comment;
 
 import javax.sql.DataSource;
@@ -47,7 +49,7 @@ public class CommentDatabase {
         return jdbcTemplate.query(SELECT_SQL_BY_USER_ID, new CommentRowMapper(), userId);
     }
 
-    static class CommentRowMapper implements RowMapper<Comment>{
+    static class CommentRowMapper implements RowMapper<Comment> {
         @Override
         public Comment mapRow(ResultSet rs) throws SQLException {
             return newComment(

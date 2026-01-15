@@ -1,6 +1,6 @@
 package handler;
 
-import db.SessionManager;
+import db.cache.SessionManager;
 import enums.ContentTypes;
 import enums.HttpHeader;
 import enums.HttpStatus;
@@ -9,9 +9,6 @@ import http.request.HttpRequest;
 import http.response.HttpResponse;
 
 public class LogoutHandler extends AbstractHandler {
-
-    public LogoutHandler() {
-    }
 
     @Override
     protected void post(HttpRequest request, HttpResponse response) throws HttpException {

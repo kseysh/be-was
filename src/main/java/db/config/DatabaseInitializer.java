@@ -1,4 +1,4 @@
-package db;
+package db.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,14 +12,18 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DatabaseInitializer {
-    private static final String ddlSQLPath = "./src/main/resources/sql/schema.sql";
-    private static final String dmlSQLPath = "./src/main/resources/sql/test_data.sql";
+
+    private DatabaseInitializer(){
+    }
+
+    private static final String DDL_SQL_PATH = "./src/main/resources/sql/schema.sql";
+    private static final String DML_SQL_PATH = "./src/main/resources/sql/test_data.sql";
     private static final Logger logger = LoggerFactory.getLogger(DatabaseInitializer.class);
 
     public static void init(){
         try {
-            String ddlSql = Files.readString(Paths.get(ddlSQLPath));
-            String dmlSql = Files.readString(Paths.get(dmlSQLPath));
+            String ddlSql = Files.readString(Paths.get(DDL_SQL_PATH));
+            String dmlSql = Files.readString(Paths.get(DML_SQL_PATH));
 
             DataSource dataSource = new CustomDataSource();
             try (Connection con = dataSource.getConnection();

@@ -1,5 +1,7 @@
 package db;
 
+import db.config.CustomJdbcTemplate;
+import db.config.RowMapper;
 import enums.ContentTypes;
 import exception.NotFoundException;
 import model.Image;
@@ -37,7 +39,7 @@ public class ImageDatabase {
                 .orElseThrow(() -> new NotFoundException(imageId + " image not found"));
     }
 
-    static class ImageRowMapper implements RowMapper<Image>{
+    static class ImageRowMapper implements RowMapper<Image> {
         @Override
         public Image mapRow(ResultSet rs) throws SQLException {
             return new Image(

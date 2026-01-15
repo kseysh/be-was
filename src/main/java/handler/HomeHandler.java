@@ -1,9 +1,7 @@
 package handler;
 
-import db.SessionManager;
-import enums.HttpMethod;
+import db.cache.SessionManager;
 import exception.HttpException;
-import exception.MethodNotAllowedException;
 import http.request.HttpRequest;
 import http.response.HttpResponse;
 import java.util.Collections;
@@ -16,9 +14,6 @@ import webserver.view.TemplateView;
 import webserver.view.View;
 
 public class HomeHandler extends AbstractHandler {
-
-    public HomeHandler() {
-    }
 
     @Override
     protected void get(HttpRequest request, HttpResponse response) throws HttpException {

@@ -1,7 +1,8 @@
-package db;
+package db.cache;
 
 import java.util.Optional;
 import java.util.UUID;
+
 import model.User;
 
 public class SessionManager {
