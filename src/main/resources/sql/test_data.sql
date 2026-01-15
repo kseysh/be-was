@@ -22,6 +22,7 @@ VALUES ('ti', 'tp', '테스트유저', 'ti@example.com', 'user-img-id-1'),
 -- 3. Article 데이터 생성
 INSERT INTO article (content, user_id, image_id, like_count)
 VALUES ( '안녕하세요, 테스트유저입니다.', 'ti', 'article-img-id-1', 1),
+       ( '안녕하세요, 테스트유저2입니다.', 'ti', 'article-img-id-1', 11),
        (  '철수의 게시글입니다.', 'user2', 'article-img-id-2', 2),
        (  '영희가 쓴 글입니다.', 'user3', 'article-img-id-3', 3),
        (  '지성이 쓴 글입니다.', 'user4', 'article-img-id-4', 4),
@@ -34,7 +35,7 @@ INSERT INTO comment (content, user_id, article_id) VALUES
 ( '반가워요 테스트유저님.', 'user5', 1),
 ( '저도 작성해봅니다.', 'ti', 1),
 
-(, '철수님 안녕하세요.', 'ti', 2),
+('철수님 안녕하세요.', 'ti', 2),
 ( '와 신기하네요.', 'user3', 2),
 ( '잘 읽었습니다.', 'user4', 2),
 ( '내용이 알차네요.', 'user5', 2),
