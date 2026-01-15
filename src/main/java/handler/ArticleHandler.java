@@ -14,13 +14,13 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
-import model.Article;
 import model.Image;
 import model.User;
 import webserver.view.StaticResourceView;
 import webserver.view.TemplateView;
 import webserver.view.View;
+
+import static model.Article.newArticle;
 
 public class ArticleHandler extends AbstractHandler {
 
@@ -57,8 +57,7 @@ public class ArticleHandler extends AbstractHandler {
 
             Image image = Image.from(imageForm);
             imageDatabase.save(image);
-            Article article = new Article(UUID.randomUUID().toString(), content, user.get().getUserId(), image.imageId(), 0);
-            articleDatabase.save(article);
+            articleDatabase.save(newArticle(content, user.get().getUserId(), image.imageId()));
 
             Map<String, Object> model = new HashMap<>();
             model.put("name", user.get().getName());

@@ -20,8 +20,7 @@ public class ArticleLikeHandler extends AbstractHandler {
                 HttpMessageConverterMapper.findHttpMessageConverter(Form.class, request.getContentType());
         Form<String, String> form = converter.read(request);
 
-        String articleId = form.get("articleId");
-        articleDatabase.addLikeCount(articleId);
+        articleDatabase.addLikeCount(Long.parseLong(form.get("articleId")));
 
         response.setStatusCode(HttpStatus.NO_CONTENT);
     }
