@@ -6,13 +6,27 @@
   <link href="../reset.css" rel="stylesheet"/>
   <link href="../global.css" rel="stylesheet"/>
   <link href="../main.css" rel="stylesheet"/>
+  <style>
+    /* 동적 제어를 위한 추가 스타일 */
+    .hidden {
+      display: none;
+    }
+    .disabled-btn {
+      pointer-events: none;
+      opacity: 0.3;
+      color: gray;
+      text-decoration: none;
+    }
+  </style>
 </head>
 <body>
 <div class="container">
-  <header class="header">
+
+  <header class="header" data-if="name">
     <a href="/main"><img src="../img/signiture.svg"/></a>
     <ul class="header__menu">
       <li class="header__menu__item">
+        안녕하세요, <a href="/mypage" class="btn">{{name}}</a>님! &nbsp;&nbsp;
         <a class="btn btn_contained btn_size_s" href="/article">글쓰기</a>
       </li>
       <li class="header__menu__item">
@@ -24,120 +38,153 @@
       </li>
     </ul>
   </header>
+
+  <header class="header" data-if="!name">
+    <a href="/"><img src="../img/signiture.svg"/></a>
+    <ul class="header__menu">
+      <li class="header__menu__item">
+        <a class="btn btn_contained btn_size_s" href="/login">로그인</a>
+      </li>
+      <li class="header__menu__item">
+        <a class="btn btn_ghost btn_size_s" href="/registration">
+          회원 가입
+        </a>
+      </li>
+    </ul>
+  </header>
+
   <div class="wrapper">
-    <div class="post">
-      <div class="post__account">
-        <img class="post__account__img"/>
-        <a href="/mypage" class="btn"><p class="post__account__nickname">{{name}}</p></a>
+    <div data-if="articleId">
+      <div class="post">
+        <div class="post__account">
+          <img class="post__account__img" src="{{authorProfileImage}}" alt="author"/>
+          <p class="post__account__nickname">{{authorName}}</p>
+        </div>
+
+        <img class="post__img" src="{{articleImage}}" alt="article image"/>
+
+        <div class="post__menu">
+          <ul class="post__menu__personal">
+            <li>
+              <button class="post__menu__btn" id="like-btn" data-article-id="{{articleId}}" style="display: flex; align-items: center; gap: 8px;">
+                <img src="../img/like.svg" alt="like"/> <span>{{likeCount}}</span>
+              </button>
+            </li>
+            &nbsp;&nbsp;
+            <li>
+              <button class="post__menu__btn" style="display: flex; align-items: center; gap: 8px;">
+                <img src="../img/comment.svg" alt="comment"/> <span>{{commentCount}}</span>
+              </button>
+            </li>
+          </ul>
+          <button class="post__menu__btn">
+            <img src="../img/bookMark.svg" alt="bookmark"/>
+          </button>
+        </div>
+
+        <p class="post__article" style="margin-bottom: 20px;margin-top: 20px">
+          {{articleContent}}
+        </p>
       </div>
-      <div><p class="post__account__nickname">{{title}}</p></div>
-      <img class="post__img" src="{{image}}"/>
-      <div class="post__menu">
-        <ul class="post__menu__personal">
-          <li>
-            <button class="post__menu__btn">
-              <img src="../img/like.svg"/>
-            </button>
+      <ul class="comment" id="comment-list">
+        <li class="comment__item" data-for="comment : comments">
+          <div class="comment__item__user">
+            <img class="comment__item__user__img" src="{{comment.writerProfileImage}}" alt="user"/>
+            <p class="comment__item__user__nickname">{{comment.writerName}}</p>
+          </div>
+          <p class="comment__item__article">
+            {{comment.content}}
+          </p>
+        </li>
+
+        <button id="show-all-btn" class="btn btn_ghost btn_size_m">
+          모든 댓글 보기({{commentCount}}개)
+        </button>
+      </ul>
+
+      <nav class="nav">
+        <ul class="nav__menu">
+          <li class="nav__menu__item">
+            <a data-if="previousArticleId" class="nav__menu__item__btn" href="/main?articleId={{previousArticleId}}">
+              <img class="nav__menu__item__img" src="../img/ci_chevron-left.svg" alt="prev"/>
+              이전 글
+            </a>
+            <a data-if="!previousArticleId" class="nav__menu__item__btn disabled-btn" href="#">
+              <img class="nav__menu__item__img" src="../img/ci_chevron-left.svg" alt="prev" style="opacity:0.3"/>
+              이전 글
+            </a>
           </li>
-          <li>
-            <button class="post__menu__btn">
-              <img src="../img/sendLink.svg"/>
-            </button>
+
+          <li class="nav__menu__item">
+            <a class="btn btn_ghost btn_size_m" href="/comment?articleId={{articleId}}">댓글 작성</a>
+          </li>
+
+          <li class="nav__menu__item">
+            <a data-if="nextArticleId" class="nav__menu__item__btn" href="/main?articleId={{nextArticleId}}">
+              다음 글
+              <img class="nav__menu__item__img" src="../img/ci_chevron-right.svg" alt="next"/>
+            </a>
+            <a data-if="!nextArticleId" class="nav__menu__item__btn disabled-btn" href="#">
+              다음 글
+              <img class="nav__menu__item__img" src="../img/ci_chevron-right.svg" alt="next" style="opacity:0.3"/>
+            </a>
           </li>
         </ul>
-        <button class="post__menu__btn">
-          <img src="../img/bookMark.svg"/>
-        </button>
-      </div>
-      <p class="post__article">
-        {{content}}
-      </p>
+      </nav>
     </div>
-    <ul class="comment">
-      <li class="comment__item">
-        <div class="comment__item__user">
-          <img class="comment__item__user__img"/>
-          <p class="comment__item__user__nickname">account</p>
-        </div>
-        <p class="comment__item__article">
-          군인 또는 군무원이 아닌 국민은 대한민국의 영역안에서는 중대한
-          군사상 기밀·초병·초소·유독음식물공급·포로·군용물에 관한 죄중
-          법률이 정한 경우와 비상계엄이 선포된 경우를 제외하고는 군사법원의
-          재판을 받지 아니한다.
-        </p>
-      </li>
-      <li class="comment__item">
-        <div class="comment__item__user">
-          <img class="comment__item__user__img"/>
-          <p class="comment__item__user__nickname">account</p>
-        </div>
-        <p class="comment__item__article">
-          대통령의 임기연장 또는 중임변경을 위한 헌법개정은 그 헌법개정 제안
-          당시의 대통령에 대하여는 효력이 없다. 민주평화통일자문회의의
-          조직·직무범위 기타 필요한 사항은 법률로 정한다.
-        </p>
-      </li>
-      <li class="comment__item">
-        <div class="comment__item__user">
-          <img class="comment__item__user__img"/>
-          <p class="comment__item__user__nickname">account</p>
-        </div>
-        <p class="comment__item__article">
-          민주평화통일자문회의의 조직·직무범위 기타 필요한 사항은 법률로
-          정한다.
-        </p>
-      </li>
-      <li class="comment__item hidden">
-        <div class="comment__item__user">
-          <img class="comment__item__user__img"/>
-          <p class="comment__item__user__nickname">account</p>
-        </div>
-        <p class="comment__item__article">Comment 1</p>
-      </li>
-      <li class="comment__item hidden">
-        <div class="comment__item__user">
-          <img class="comment__item__user__img"/>
-          <p class="comment__item__user__nickname">account</p>
-        </div>
-        <p class="comment__item__article">Comment 2</p>
-      </li>
-      <li class="comment__item hidden">
-        <div class="comment__item__user">
-          <img class="comment__item__user__img"/>
-          <p class="comment__item__user__nickname">account</p>
-        </div>
-        <p class="comment__item__article">Comment 3</p>
-      </li>
-      <button id="show-all-btn" class="btn btn_ghost btn_size_m">
-        모든 댓글 보기(3개)
-      </button>
-    </ul>
-    <nav class="nav">
-      <ul class="nav__menu">
-        <li class="nav__menu__item">
-          <a class="nav__menu__item__btn" href="">
-            <img
-                class="nav__menu__item__img"
-                src="../img/ci_chevron-left.svg"
-            />
-            이전 글
-          </a>
-        </li>
-        <li class="nav__menu__item">
-          <a class="btn btn_ghost btn_size_m" href="/comment">댓글 작성</a>
-        </li>
-        <li class="nav__menu__item">
-          <a class="nav__menu__item__btn" href="">
-            다음 글
-            <img
-                class="nav__menu__item__img"
-                src="../img/ci_chevron-right.svg"
-            />
-          </a>
-        </li>
-      </ul>
-    </nav>
+
+    <div data-if="!articleId" style="text-align: center; padding: 50px;">
+      <p>게시글이 존재하지 않습니다.</p>
+    </div>
+
   </div>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // 1. 댓글 표시 로직
+    const commentList = document.querySelectorAll('.comment__item');
+    const showAllBtn = document.getElementById('show-all-btn');
+    const maxVisible = 3;
+
+    if (commentList.length <= maxVisible) {
+      if(showAllBtn) showAllBtn.style.display = 'none';
+    } else {
+      for (let i = maxVisible; i < commentList.length; i++) {
+        commentList[i].classList.add('hidden');
+      }
+    }
+
+    if(showAllBtn) {
+      showAllBtn.addEventListener('click', () => {
+        commentList.forEach(item => item.classList.remove('hidden'));
+        showAllBtn.style.display = 'none';
+      });
+    }
+
+    // 2. 좋아요 버튼 로직
+    const likeBtn = document.getElementById('like-btn');
+    if(likeBtn) {
+      likeBtn.addEventListener('click', function() {
+        const articleId = this.getAttribute('data-article-id');
+
+        fetch('/article/like', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: `articleId=${articleId}`
+        })
+                .then(response => {
+                  if (response.ok) {
+                    location.reload();
+                  } else {
+                  }
+                })
+                .catch(error => console.error('Error:', error));
+      });
+    }
+  });
+</script>
 </body>
 </html>
