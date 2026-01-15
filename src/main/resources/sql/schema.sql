@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS users (
     );
 
 CREATE TABLE IF NOT EXISTS article (
-    article_id    VARCHAR(255) PRIMARY KEY,
+    article_id    VARCHAR(255) PRIMARY KEY AUTO_INCREMENT,
     content       CLOB,
     user_id       VARCHAR(50) NOT NULL,
     image_id      VARCHAR(255) NOT NULL,
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS article (
     );
 
 CREATE TABLE IF NOT EXISTS comment (
-    comment_id    VARCHAR(255) PRIMARY KEY,
+    comment_id    VARCHAR(255) PRIMARY KEY AUTO_INCREMENT,
     content       CLOB NOT NULL,
     user_id       VARCHAR(50) NOT NULL,
     article_id    VARCHAR(255) NOT NULL
