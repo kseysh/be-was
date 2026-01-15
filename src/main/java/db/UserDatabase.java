@@ -8,6 +8,7 @@ import model.User;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 public class UserDatabase {
@@ -16,6 +17,7 @@ public class UserDatabase {
     private static final String INSERT_SQL = "insert into USERS (USER_ID, PASSWORD, NAME, EMAIL, IMAGE_ID) values (?, ?, ?, ?, ?)";
     private static final String UPDATE_SQL = "update USERS set PASSWORD = ?, NAME = ?, EMAIL = ?, IMAGE_ID = ? where USER_ID = ?";
     private static final String SELECT_SQL = "select * from USERS u where u.USER_ID = ?";
+    private static final String SELECT_ALL_SQL = "select * from USERS";
     private static final String SELECT_SQL_BY_NAME = "select * from USERS where NAME = ?";
 
     public UserDatabase(DataSource dataSource) {
@@ -55,6 +57,10 @@ public class UserDatabase {
 
     public Optional<User> findByName(String name) {
         return jdbcTemplate.queryForObject(SELECT_SQL_BY_NAME, new UserRowMapper(), name);
+    }
+
+    public List<User> findAll() {
+        return jdbcTemplate.query(SELECT_ALL_SQL, new UserRowMapper());
     }
 
     static class UserRowMapper implements RowMapper<User> {

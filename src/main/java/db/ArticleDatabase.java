@@ -7,12 +7,14 @@ import model.Article;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 public class ArticleDatabase {
 
     private final CustomJdbcTemplate jdbcTemplate;
     private static final String SELECT_SQL = "select * from ARTICLE where ARTICLE_ID = ?";
+    private static final String SELECT_ALL_SQL = "select * from ARTICLE";
     private static final String SELECT_RECENT_SQL = "select * from ARTICLE order by ARTICLE_ID desc limit 1";
     private static final String SELECT_PREV_ARTICLE_SQL = "SELECT * FROM ARTICLE WHERE ARTICLE_ID > ? ORDER BY ARTICLE_ID ASC LIMIT 1";
     private static final String SELECT_NEXT_ARTICLE_SQL = "SELECT * FROM ARTICLE WHERE ARTICLE_ID < ? ORDER  BY ARTICLE_ID DESC LIMIT 1";
@@ -50,6 +52,10 @@ public class ArticleDatabase {
 
     public Optional<Article> findNextArticle(Long articleId) {
         return jdbcTemplate.queryForObject(SELECT_NEXT_ARTICLE_SQL, new ArticleRowMapper(), articleId);
+    }
+
+    public List<Article> findAll() {
+        return jdbcTemplate.query(SELECT_ALL_SQL, new ArticleRowMapper());
     }
 
     static class ArticleRowMapper implements RowMapper<Article> {
