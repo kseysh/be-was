@@ -14,8 +14,8 @@ public class ArticleDatabase {
     private final CustomJdbcTemplate jdbcTemplate;
     private static final String SELECT_SQL = "select * from ARTICLE where ARTICLE_ID = ?";
     private static final String SELECT_RECENT_SQL = "select * from ARTICLE order by ARTICLE_ID desc limit 1";
-    private static final String SELECT_PREV_ARTICLE_SQL = "SELECT * FROM ARTICLE WHERE ARTICLE_ID < ? ORDER  BY ARTICLE_ID DESC LIMIT 1";
-    private static final String SELECT_NEXT_ARTICLE_SQL = "SELECT * FROM ARTICLE WHERE ARTICLE_ID > ? ORDER BY ARTICLE_ID ASC LIMIT 1";
+    private static final String SELECT_PREV_ARTICLE_SQL = "SELECT * FROM ARTICLE WHERE ARTICLE_ID > ? ORDER BY ARTICLE_ID ASC LIMIT 1";
+    private static final String SELECT_NEXT_ARTICLE_SQL = "SELECT * FROM ARTICLE WHERE ARTICLE_ID < ? ORDER  BY ARTICLE_ID DESC LIMIT 1";
     private static final String INSERT_SQL = "insert into ARTICLE (CONTENT, USER_ID, IMAGE_ID, LIKE_COUNT) values (?, ?, ?, ?)";
     private static final String UPDATE_LIKE_COUNT_SQL = "update ARTICLE set LIKE_COUNT = LIKE_COUNT + 1 where ARTICLE_ID = ?";
 
