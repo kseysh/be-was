@@ -2,6 +2,7 @@ package db;
 
 import db.config.CustomJdbcTemplate;
 import db.config.RowMapper;
+import exception.NotFoundException;
 import model.User;
 
 import javax.sql.DataSource;
@@ -45,6 +46,11 @@ public class UserDatabase {
 
     public Optional<User> findById(String userId) {
         return jdbcTemplate.queryForObject(SELECT_SQL, new UserRowMapper(), userId);
+    }
+
+    public User findByIdOrElseThrow(String userId) {
+        return jdbcTemplate.queryForObject(SELECT_SQL, new UserRowMapper(), userId)
+                .orElseThrow(() -> new NotFoundException("user not found"));
     }
 
     public Optional<User> findByName(String name) {
