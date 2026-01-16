@@ -68,12 +68,14 @@
                 <div class="form_fields">
                     <div class="textfield textfield_size_s input_margin">
                         <p class="title_textfield">닉네임</p>
-                        <input class="input_textfield" name="nickname" value="{{name}}" placeholder="닉네임"/>
+                        <input class="input_textfield" name="nickname" value="{{name}}" placeholder="닉네임" minlength="4"
+                               maxlength="20"/>
                     </div>
 
                     <div class="textfield textfield_size_s">
                         <p class="title_textfield">비밀번호</p>
-                        <input class="input_textfield" type="password" name="password" placeholder="변경할 경우 입력"/>
+                        <input class="input_textfield" type="password" name="password" placeholder="변경할 경우 입력"
+                               minlength="4" maxlength="20"/>
                     </div>
 
                     <div class="textfield textfield_size_s">
@@ -135,7 +137,7 @@
             try {
                 const response = await fetch(DEFAULT_IMAGE);
                 const blob = await response.blob();
-                const defaultFile = new File([blob], "default-profile.svg", { type: blob.type });
+                const defaultFile = new File([blob], "default-profile.svg", {type: blob.type});
                 formData.set('image', defaultFile);
 
             } catch (err) {
