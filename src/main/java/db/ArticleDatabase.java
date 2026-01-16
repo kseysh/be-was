@@ -34,6 +34,16 @@ public class ArticleDatabase {
         );
     }
 
+    public Article saveAndGet(Article article) {
+        return jdbcTemplate.queryForObject(INSERT_SQL,
+                new ArticleRowMapper(),
+                article.getContent(),
+                article.getUserId(),
+                article.getImageId(),
+                article.getLikeCount()
+        ).orElseThrow(() -> new RuntimeException("Failed to save article"));
+    }
+
     public Optional<Article> findById(Long articleId) {
         return jdbcTemplate.queryForObject(SELECT_SQL, new ArticleRowMapper(), articleId);
     }

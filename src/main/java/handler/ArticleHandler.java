@@ -3,6 +3,8 @@ package handler;
 import db.*;
 import db.cache.SessionManager;
 import db.config.DatabaseConfig;
+import enums.HttpHeader;
+import enums.HttpStatus;
 import exception.HttpException;
 import http.converter.HttpMessageConverter;
 import http.converter.HttpMessageConverterMapper;
@@ -14,6 +16,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+
+import model.Article;
 import model.Image;
 import model.User;
 import webserver.view.StaticResourceView;
@@ -24,8 +28,8 @@ import static model.Article.newArticle;
 
 public class ArticleHandler extends AbstractHandler {
 
-    private final ArticleDatabase articleDatabase = DatabaseConfig.articleDatabase;
-    private final ImageDatabase imageDatabase = DatabaseConfig.imageDatabase;
+    private static final ArticleDatabase articleDatabase = DatabaseConfig.articleDatabase;
+    private static final ImageDatabase imageDatabase = DatabaseConfig.imageDatabase;
 
     @Override
     protected void get(HttpRequest request, HttpResponse response) throws HttpException {
@@ -57,19 +61,18 @@ public class ArticleHandler extends AbstractHandler {
 
             Image image = Image.from(imageForm);
             imageDatabase.save(image);
-            articleDatabase.save(newArticle(content, user.get().getUserId(), image.imageId()));
+            Article article = articleDatabase.saveAndGet(newArticle(content, user.get().getUserId(), image.imageId()));
 
             Map<String, Object> model = new HashMap<>();
             model.put("name", user.get().getName());
             model.put("content", content);
             model.put("image", image.toImageString());
 
-            // TODO: 새로운 게시물의 화면으로 이동할 수 있어야 한다.
-            View view = new TemplateView("/main/index.html");
-            view.render(model, request, response);
+            response.setStatusCode(HttpStatus.FOUND)
+                    .setHeader(HttpHeader.LOCATION.getValue(), "/main?articleId=" + article.getArticleId());
         } else {
-            View view = new StaticResourceView("/login/index.html");
-            view.render(Collections.emptyMap(), request, response);
+            response.setStatusCode(HttpStatus.FOUND)
+                    .setHeader(HttpHeader.LOCATION.getValue(), "/login");
         }
     }
 }
