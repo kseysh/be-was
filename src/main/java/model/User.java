@@ -23,9 +23,9 @@ public class User {
         return userId;
     }
 
-    public void changeUserName(String name, NameChangePolicy nameChangePolicy){
-        nameChangePolicy.validate(name);
-        this.name = name;
+    public void changeUserName(String prevName, String newName, NameChangePolicy nameChangePolicy){
+        nameChangePolicy.validate(prevName, newName);
+        this.name = newName;
     }
 
     public void changePassword(String password, PasswordChangePolicy passwordChangePolicy){

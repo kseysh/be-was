@@ -55,11 +55,11 @@ public class MyPageHandler extends AbstractHandler{
         MultipartData multipartData = converter.read(request);
 
         ImageForm imageForm = multipartData.getFileBytes("image");
-        String nickname = multipartData.getTexts("nickname");
+        String newName = multipartData.getTexts("nickname");
         String password = multipartData.getTexts("password");
         String passwordConfirm = multipartData.getTexts("passwordConfirm");
 
-        user.changeUserName(nickname, new NameChangePolicy());
+        user.changeUserName(user.getName(), newName, new NameChangePolicy());
 
         if(imageForm != null){
             String profileImageId = user.getProfileImageId();
