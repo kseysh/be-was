@@ -34,9 +34,9 @@ public class ArticleDatabase {
         );
     }
 
-    public Article saveAndGet(Article article) {
-        return jdbcTemplate.queryForObject(INSERT_SQL,
-                new ArticleRowMapper(),
+    public Long saveAndGetKey(Article article) {
+        return jdbcTemplate.updateAndGetKey(INSERT_SQL,
+                rs -> rs.getLong(1),
                 article.getContent(),
                 article.getUserId(),
                 article.getImageId(),

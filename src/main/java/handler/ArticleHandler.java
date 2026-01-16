@@ -17,7 +17,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import model.Article;
 import model.Image;
 import model.User;
 import webserver.view.StaticResourceView;
@@ -61,7 +60,7 @@ public class ArticleHandler extends AbstractHandler {
 
             Image image = Image.from(imageForm);
             imageDatabase.save(image);
-            Article article = articleDatabase.saveAndGet(newArticle(content, user.get().getUserId(), image.imageId()));
+            Long articleId = articleDatabase.saveAndGetKey(newArticle(content, user.get().getUserId(), image.imageId()));
 
             Map<String, Object> model = new HashMap<>();
             model.put("name", user.get().getName());
@@ -69,7 +68,7 @@ public class ArticleHandler extends AbstractHandler {
             model.put("image", image.toImageString());
 
             response.setStatusCode(HttpStatus.FOUND)
-                    .setHeader(HttpHeader.LOCATION.getValue(), "/main?articleId=" + article.getArticleId());
+                    .setHeader(HttpHeader.LOCATION.getValue(), "/main?articleId=" + articleId);
         } else {
             response.setStatusCode(HttpStatus.FOUND)
                     .setHeader(HttpHeader.LOCATION.getValue(), "/login");

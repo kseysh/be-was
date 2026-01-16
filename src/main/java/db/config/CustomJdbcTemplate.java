@@ -47,6 +47,26 @@ public class CustomJdbcTemplate {
         }
     }
 
+    public <K> Optional<K> updateAndGetKey(String sql, RowMapper<K> rowMapper, Object... args) {
+        try (Connection con = dataSource.getConnection();
+             PreparedStatement pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            setParameters(pstmt, args);
+            pstmt.executeUpdate();
+
+            try (ResultSet rs = pstmt.getGeneratedKeys()) {
+                if (rs.next()) {
+                    return Optional.ofNullable(rowMapper.mapRow(rs));
+                }
+                return Optional.empty();
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("DB Update Error: " + sql, e);
+        }
+    }
+
+
     private void setParameters(PreparedStatement pstmt, Object[] args) throws SQLException {
         for (int i = 0; i < args.length; i++) {
             pstmt.setObject(i + 1, args[i]);
