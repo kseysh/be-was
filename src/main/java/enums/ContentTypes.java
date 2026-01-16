@@ -28,7 +28,7 @@ public enum ContentTypes {
 
     public static ContentTypes fromExtension(String extension) {
         for (ContentTypes contentType : ContentTypes.values()) {
-            if (contentType.extension.equals(extension)) {
+            if (contentType.extension.equalsIgnoreCase(extension)) {
                 return contentType;
             }
         }
