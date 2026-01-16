@@ -22,7 +22,6 @@ import java.util.List;
 
 import static model.Article.newArticle;
 import static model.Comment.newComment;
-import static model.User.newUser;
 
 public class DatabaseInitializer {
 
@@ -89,7 +88,14 @@ public class DatabaseInitializer {
         for (int i = 0; i < count; i++) {
             Image image = Image.defaultImage();
             imageDatabase.save(image);
-            User user = newUser("password" + i, "name" + i, null, image.imageId());
+            String countStr = String.valueOf(i);
+            User user = new User(
+                    "id" + countStr ,
+                    "pw" + countStr,
+                    "name" + countStr,
+                    null,
+                    image.imageId()
+            );
             userDatabase.save(user);
         }
     }

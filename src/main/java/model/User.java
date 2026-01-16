@@ -1,7 +1,5 @@
 package model;
 
-import java.util.UUID;
-
 public class User {
 
     private final String userId;
@@ -16,10 +14,6 @@ public class User {
         this.name = name;
         this.email = email;
         this.imageId = imageId;
-    }
-
-    public static User newUser(String password, String name, String email, String imageId) {
-        return new User(UUID.randomUUID().toString(), password, name, email, imageId);
     }
 
     public String getUserId() {
