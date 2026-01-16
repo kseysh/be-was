@@ -18,7 +18,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import model.Image;
+import model.policy.NameChangePolicy;
 import model.User;
+import model.policy.PasswordChangePolicy;
 import webserver.view.TemplateView;
 import webserver.view.View;
 
@@ -30,7 +32,8 @@ public class MyPageHandler extends AbstractHandler{
     @Override
     protected void get(HttpRequest request, HttpResponse response) throws HttpException {
         String sessionId = request.getCookieValue("sid");
-        User user = SessionManager.getInstance().getAttribute(sessionId).orElseThrow(() -> new UnauthorizedException("unauthorized"));
+        User user = SessionManager.getInstance().getAttribute(sessionId)
+                .orElseThrow(() -> new UnauthorizedException("unauthorized"));
 
         Image userProfileImage = imageDatabase.findByIdOrElseThrow(user.getProfileImageId());
 
@@ -56,8 +59,7 @@ public class MyPageHandler extends AbstractHandler{
         String password = multipartData.getTexts("password");
         String passwordConfirm = multipartData.getTexts("passwordConfirm");
 
-        if(nickname == null) throw new BadRequestException("nickname required");
-        user.changeUserName(nickname);
+        user.changeUserName(nickname, new NameChangePolicy());
 
         if(imageForm != null){
             String profileImageId = user.getProfileImageId();
@@ -66,7 +68,7 @@ public class MyPageHandler extends AbstractHandler{
 
         if(password != null && !password.isEmpty()){
             if (password.equals(passwordConfirm)) {
-                user.changePassword(password);
+                user.changePassword(password, new PasswordChangePolicy());
             }else{
                 throw new BadRequestException("password not matched");
             }

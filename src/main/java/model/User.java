@@ -1,5 +1,8 @@
 package model;
 
+import model.policy.NameChangePolicy;
+import model.policy.PasswordChangePolicy;
+
 public class User {
 
     private final String userId;
@@ -20,12 +23,14 @@ public class User {
         return userId;
     }
 
-    public void changeUserName(String name){
+    public void changeUserName(String name, NameChangePolicy nameChangePolicy){
+        nameChangePolicy.validate(name);
         this.name = name;
     }
 
-    public void changePassword(String password){
+    public void changePassword(String password, PasswordChangePolicy passwordChangePolicy){
         this.password = password;
+        passwordChangePolicy.validate(password);
     }
 
     public String getName() {
