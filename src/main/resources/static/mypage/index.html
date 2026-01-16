@@ -6,27 +6,19 @@
     <link href="../reset.css" rel="stylesheet"/>
     <link href="../global.css" rel="stylesheet"/>
     <style>
-        /* 1. SVG 규격(200x200)에 맞춘 컨테이너 */
         .profile_image {
-            width: 200px;        /* SVG width와 동일 */
-            height: 200px;       /* SVG height와 동일 */
-            border-radius: 50%;  /* 완벽한 원형 */
-            overflow: hidden;    /* 영역 밖 이미지 절단 */
-            background-color: #D9D9D9; /* SVG의 fill 컬러와 동일하게 기본 배경 설정 */
-
-            /* 중앙 정렬을 위한 설정 (부모 요소 내에서) */
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            overflow: hidden;
+            background-color: #D9D9D9;
             margin: 0 auto;
         }
 
-        /* 2. 원 안에 이미지를 꽉 채우는 설정 */
         .profile {
             width: 100%;
             height: 100%;
-
-            /* 이미지가 찌그러지지 않게 비율을 유지하며 200x200을 꽉 채움 */
             object-fit: cover;
-
-            /* 이미지의 중심을 기준으로 배치 */
             object-position: center;
         }
     </style>
@@ -99,11 +91,10 @@
     </div>
 </div>
 <script>
-    const DEFAULT_IMAGE = "../img/default-profile.svg";
-    const INITIAL_IMAGE = "{{image}}"; // 서버에서 받아온 초기 이미지 경로 저장
+    const DEFAULT_IMAGE = "../img/basic_profileImage.svg";
     const preview = document.getElementById('profile-preview');
     const fileInput = document.getElementById('image-input');
-    let isImageDeleted = false; // 삭제 버튼을 눌렀는지 여부 기록
+    let isImageDeleted = false;
 
     // 1. 이미지 미리보기 로직
     function previewImage(input) {
@@ -111,7 +102,7 @@
             const reader = new FileReader();
             reader.onload = (e) => {
                 preview.src = e.target.result;
-                isImageDeleted = false; // 새 파일을 선택하면 삭제 상태 해제
+                isImageDeleted = false;
             };
             reader.readAsDataURL(input.files[0]);
         }
@@ -120,8 +111,8 @@
     // 2. 이미지 삭제 로직
     function resetImage() {
         preview.src = DEFAULT_IMAGE;
-        fileInput.value = ""; // 선택된 파일 초기화
-        isImageDeleted = true; // 삭제 상태 활성화
+        fileInput.value = "";
+        isImageDeleted = true;
     }
 
     // 3. 폼 전송 로직
@@ -131,8 +122,7 @@
         const password = e.target.password.value;
         const passwordConfirm = e.target.passwordConfirm.value;
 
-        // [추가] 비밀번호 확인 로직
-        if (password || passwordConfirm) { // 비밀번호를 입력하려고 한 경우
+        if (password || passwordConfirm) {
             if (password !== passwordConfirm) {
                 alert("비밀번호가 일치하지 않습니다.");
                 return;
@@ -141,14 +131,19 @@
 
         const formData = new FormData(e.target);
 
-        // [개선] 이미지 전송 로직 분기 처리
         if (isImageDeleted) {
-            // 삭제 버튼을 눌렀을 때
-            formData.set('isDeleteImage', 'true');
-            formData.delete('image'); // 빈 파일이 전송되지 않도록 삭제
+            try {
+                const response = await fetch(DEFAULT_IMAGE);
+                const blob = await response.blob();
+                const defaultFile = new File([blob], "default-profile.svg", { type: blob.type });
+                formData.set('image', defaultFile);
+
+            } catch (err) {
+                console.error("기본 이미지 로드 실패:", err);
+                alert("기본 이미지 처리 중 오류가 발생했습니다.");
+                return;
+            }
         } else if (!fileInput.files[0]) {
-            // 수정 버튼을 누르지 않았을 때 (기존 이미지 유지)
-            // 서버에서 "image 필드가 없으면 기존 데이터 유지"로 처리하도록 필드 제거
             formData.delete('image');
         }
 
@@ -159,7 +154,6 @@
             });
 
             if (response.redirected) {
-                // 응답이 성공적이면 메인으로 이동
                 window.location.href = "/";
             } else {
                 const errorData = await response.json();
@@ -167,7 +161,7 @@
             }
         } catch (error) {
             console.error("Error:", error);
-            alert("서버 통신 중 오류가 발생했습니다.");
+            window.location.href = "/";
         }
     });
 </script>
