@@ -25,12 +25,6 @@ public class ExceptionResolver {
             errorPage = DEFAULT_ERROR_PAGE;
         }
 
-        if (e.getStatus() == HttpStatus.UNAUTHORIZED){
-            response.setStatusCode(HttpStatus.FOUND)
-                    .setHeader(HttpHeader.LOCATION.getValue(), "/login");
-            return;
-        }
-
         response.setStatusCode(e.getStatus())
                 .setBody(FileReader.readFile(errorPage))
                 .setHeader(HttpHeader.CONTENT_TYPE.getValue(), ContentTypes.TEXT_HTML.getMimeType());
