@@ -5,6 +5,7 @@ import db.cache.SessionManager;
 import db.config.DatabaseConfig;
 import enums.HttpHeader;
 import enums.HttpStatus;
+import exception.BadRequestException;
 import exception.HttpException;
 import http.converter.HttpMessageConverter;
 import http.converter.HttpMessageConverterMapper;
@@ -57,6 +58,8 @@ public class ArticleHandler extends AbstractHandler {
 
             String content = multipartData.getTexts("content");
             ImageForm imageForm = multipartData.getFileBytes("image");
+
+            if(imageForm == null) throw new BadRequestException("image is required");
 
             Image image = Image.from(imageForm);
             imageDatabase.save(image);
