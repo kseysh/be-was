@@ -74,7 +74,7 @@ public class HomeHandler extends AbstractHandler {
                     Image writerProfileImage = imageDatabase.findByIdOrElseThrow(writer.getProfileImageId());
                     return new CommentResponse(
                             writer.getName(),
-                            writerProfileImage.bytes(),
+                            writerProfileImage,
                             comment.getContent()
                     );
                 }).toList();
